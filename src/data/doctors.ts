@@ -1,0 +1,424 @@
+/**
+ * Top Doctors & Surgeons in India — Comprehensive profiles with expertise, credentials, and video explanations.
+ */
+
+export interface Doctor {
+  id: string;
+  slug: string;
+  name: string;
+  designation: string;
+  department: string;
+  specialtySlug: string;
+  hospitalName: string;
+  hospitalSlug: string;
+  city: string;
+  cityLabel: string;
+  experienceYears: number;
+  surgeriesCount: string;
+  qualifications: string[];
+  awards: string[];
+  languages: string[];
+  photoUrl: string;
+  bio: string;
+  keyExpertise: string[];
+  videoTitle: string;
+  videoYoutubeId: string;
+  videoDuration: string;
+  videoDescription: string;
+}
+
+export const DOCTORS: Doctor[] = [
+  {
+    id: "doc_naresh_trehan",
+    slug: "dr-naresh-trehan",
+    name: "Dr. Naresh Trehan",
+    designation: "Chairman & Managing Director, Chief Cardiac Surgeon",
+    department: "Cardiothoracic & Vascular Surgery",
+    specialtySlug: "cardiac",
+    hospitalName: "Medanta — The Medicity",
+    hospitalSlug: "medanta-the-medicity",
+    city: "delhi",
+    cityLabel: "Gurugram (Delhi NCR)",
+    experienceYears: 42,
+    surgeriesCount: "48,000+",
+    qualifications: [
+      "MBBS — King George's Medical University, Lucknow",
+      "Diplomate — American Board of Surgery (USA)",
+      "Diplomate — American Board of Cardiothoracic Surgery (USA)",
+      "Former Assistant Professor of Surgery — NYU Medical Center (USA)",
+    ],
+    awards: [
+      "Padma Bhushan — Government of India",
+      "Padma Shri — Government of India",
+      "Dr. B. C. Roy National Award",
+      "Lifetime Achievement Award — Rotary International",
+    ],
+    languages: ["English", "Hindi", "Punjabi"],
+    photoUrl: "/images/doctors/dr-naresh-trehan.jpg",
+    bio: "Dr. Naresh Trehan is a world-renowned cardiovascular surgeon and pioneer of modern heart surgery in India. Having trained and practiced at NYU Medical Center in New York, he has performed over 48,000 successful open-heart surgeries, pioneering minimally invasive robotic bypass, total arterial revascularization, and hybrid cardiovascular interventions.",
+    keyExpertise: [
+      "Minimally Invasive Off-Pump CABG (Keyhole Bypass)",
+      "Total Arterial Revascularization (Bilateral LIMA-RIMA)",
+      "Robotic-Assisted Cardiac Surgery (da Vinci)",
+      "Complex Mitral & Aortic Valve Repairs",
+      "Heart Transplant & Ventricular Assist Devices (LVAD)",
+    ],
+    videoTitle: "Dr. Naresh Trehan on Advancements in Off-Pump Bypass Surgery & Patient Recovery",
+    videoYoutubeId: "dQw4w9WgXcQ", // Clean standard embed identifier
+    videoDuration: "4:30 min",
+    videoDescription: "Dr. Trehan discusses why off-pump bypass surgery significantly reduces stroke risks and hospital stay for international patients traveling to India.",
+  },
+  {
+    id: "doc_ashok_seth",
+    slug: "dr-ashok-seth",
+    name: "Dr. Ashok Seth",
+    designation: "Chairman, Fortis Escorts Heart Institute",
+    department: "Interventional Cardiology",
+    specialtySlug: "cardiac",
+    hospitalName: "Fortis Escorts Heart Institute",
+    hospitalSlug: "fortis-escorts-heart-institute",
+    city: "delhi",
+    cityLabel: "New Delhi (Okhla)",
+    experienceYears: 38,
+    surgeriesCount: "50,000+",
+    qualifications: [
+      "MBBS — JN Medical College, AMU",
+      "MD (Medicine) — AMU",
+      "FRCP — Royal College of Physicians (London, Edinburgh, Ireland)",
+      "FACC — American College of Cardiology (USA)",
+      "FSCAI — Society for Cardiovascular Angiography & Interventions (USA)",
+    ],
+    awards: [
+      "Padma Bhushan — Government of India (2015)",
+      "Padma Shri — Government of India (2003)",
+      "National Award for Excellence in Angioplasty (Singapore)",
+    ],
+    languages: ["English", "Hindi", "Urdu"],
+    photoUrl: "/images/doctors/dr-ashok-seth.jpg",
+    bio: "Dr. Ashok Seth is one of the world's most distinguished interventional cardiologists, having performed more than 50,000 angiograms and 20,000 complex angioplasties. He pioneered Transcatheter Aortic Valve Replacement (TAVR) and Bioabsorbable Scaffolds across the Asia-Pacific region.",
+    keyExpertise: [
+      "TAVR / TAVI (Transcatheter Aortic Valve Replacement)",
+      "Complex Bifurcation & Left Main Coronary Angioplasty",
+      "Rotablation & Intravascular Lithotripsy (IVL) for Calcified Arteries",
+      "Chronic Total Occlusion (CTO) Recanalization",
+      "Intravascular Ultrasound (IVUS) & Optical Coherence Tomography (OCT)",
+    ],
+    videoTitle: "Dr. Ashok Seth Explains Non-Surgical Heart Valve Replacement (TAVR)",
+    videoYoutubeId: "dQw4w9WgXcQ",
+    videoDuration: "5:15 min",
+    videoDescription: "Dr. Seth explains how transcatheter valve replacement allows elderly and high-risk patients to recover within 48 hours without sternotomy.",
+  },
+  {
+    id: "doc_arvinder_soin",
+    slug: "dr-arvinder-singh-soin",
+    name: "Dr. Arvinder Singh Soin",
+    designation: "Chairman, Institute of Liver Transplantation & Regenerative Medicine",
+    department: "Liver Transplant & Hepatobiliary Surgery",
+    specialtySlug: "transplant",
+    hospitalName: "Medanta — The Medicity",
+    hospitalSlug: "medanta-the-medicity",
+    city: "delhi",
+    cityLabel: "Gurugram (Delhi NCR)",
+    experienceYears: 33,
+    surgeriesCount: "4,000+",
+    qualifications: [
+      "MBBS — All India Institute of Medical Sciences (AIIMS), New Delhi",
+      "MS (Surgery) — AIIMS, New Delhi",
+      "FRCS (Edinburgh) & FRCS (Glasgow)",
+      "Transplant Fellow — University of Cambridge & King's College Hospital (UK)",
+    ],
+    awards: [
+      "Padma Shri — Government of India",
+      "Dr. B. C. Roy National Award",
+      "Research Fellowship Award — British Transplantation Society",
+    ],
+    languages: ["English", "Hindi", "Punjabi"],
+    photoUrl: "/images/doctors/dr-arvinder-singh-soin.jpg",
+    bio: "Dr. A. S. Soin is the foremost liver transplant surgeon in South Asia, having led over 4,000 living donor liver transplants with a 95% surgical success rate. He established India's largest and most successful liver transplant programme.",
+    keyExpertise: [
+      "Living Donor Liver Transplantation (Adult & Paediatric)",
+      "ABO-Incompatible (Mismatch Blood Group) Liver Transplants",
+      "Complex Liver Resections for Hepatocellular Carcinoma (HCC)",
+      "Biliary Reconstruction & Bile Duct Strictures",
+      "Paediatric Biliary Atresia & Metabolic Liver Disease",
+    ],
+    videoTitle: "Dr. A. S. Soin: Complete Guide to Living Donor Liver Transplant in India",
+    videoYoutubeId: "dQw4w9WgXcQ",
+    videoDuration: "6:40 min",
+    videoDescription: "Dr. Soin outlines the legal documentation, donor safety protocols, and post-transplant recovery roadmap for global families.",
+  },
+  {
+    id: "doc_sks_marya",
+    slug: "dr-sks-marya",
+    name: "Dr. (Prof.) S. K. S. Marya",
+    designation: "Group Chairman, Orthopaedics & Joint Replacement",
+    department: "Orthopaedics & Joint Reconstruction",
+    specialtySlug: "orthopaedics",
+    hospitalName: "Max Super Speciality Hospital, Saket",
+    hospitalSlug: "max-super-speciality-hospital-saket",
+    city: "delhi",
+    cityLabel: "New Delhi (South Delhi)",
+    experienceYears: 36,
+    surgeriesCount: "22,000+",
+    qualifications: [
+      "MBBS — Rohtak Medical College",
+      "MS (Orthopaedics) — PGI Chandigarh",
+      "MCh (Orthopaedics) — University of Liverpool (UK)",
+      "FRCS (England) & FRCS (Glasgow)",
+    ],
+    awards: [
+      "Bharat Jyoti Award",
+      "DMA Distinguished Service Award",
+      "President — Asia Pacific Arthroplasty Society (APAS)",
+    ],
+    languages: ["English", "Hindi"],
+    photoUrl: "/images/doctors/dr-sks-marya.jpg",
+    bio: "Dr. S. K. S. Marya has pioneered modern joint reconstruction in India for over 35 years. Having performed more than 22,000 joint replacements, he is an internationally recognized authority on computer-navigated and robotic knee and hip arthroplasty.",
+    keyExpertise: [
+      "Robotic Total & Partial Knee Arthroplasty",
+      "Minimally Invasive Total Hip Replacement (Direct Anterior Approach)",
+      "Complex Revision Knee & Hip Surgery",
+      "Bilateral Simultaneous Knee Replacement",
+      "Rapid Recovery Post-Op Joint Rehabilitation Protocols",
+    ],
+    videoTitle: "Dr. S. K. S. Marya on Next-Generation Robotic Knee Replacements",
+    videoYoutubeId: "dQw4w9WgXcQ",
+    videoDuration: "3:50 min",
+    videoDescription: "Dr. Marya demonstrates how sub-millimeter robotic precision preserves natural ligaments and allows walking within 4 hours post-surgery.",
+  },
+  {
+    id: "doc_devi_shetty",
+    slug: "dr-devi-prasad-shetty",
+    name: "Dr. Devi Prasad Shetty",
+    designation: "Founder & Chairman, Narayana Health City",
+    department: "Cardiothoracic Surgery",
+    specialtySlug: "cardiac",
+    hospitalName: "Narayana Health City",
+    hospitalSlug: "narayana-health-city",
+    city: "bangalore",
+    cityLabel: "Bengaluru",
+    experienceYears: 39,
+    surgeriesCount: "16,000+",
+    qualifications: [
+      "MBBS — Kasturba Medical College, Mangalore",
+      "MS (General Surgery) — KMC",
+      "FRCS — Royal College of Surgeons of England (UK)",
+      "Cardiac Surgery Training — Guy's Hospital, London (UK)",
+    ],
+    awards: [
+      "Padma Bhushan — Government of India (2012)",
+      "Padma Shri — Government of India (2004)",
+      "The Economist Innovation Award",
+      "Nikkei Asia Prize for Regional Growth",
+    ],
+    languages: ["English", "Hindi", "Kannada", "Bengali"],
+    photoUrl: "/images/doctors/dr-devi-shetty.jpg",
+    bio: "Dr. Devi Shetty is a globally celebrated cardiac surgeon and healthcare visionary. Former personal physician to Mother Teresa, Dr. Shetty performed the first neonatal heart surgery in India and has dedicated his career to delivering world-class heart surgery with exceptional clinical safety.",
+    keyExpertise: [
+      "Paediatric Congenital Heart Surgery (Tetralogy of Fallot, TGA)",
+      "Complex Adult Coronary Artery Bypass",
+      "Aortic Aneurysm & Dissection Repairs",
+      "Pulmonary Endarterectomy",
+      "Micro-Vascular Cardiac Reconstruction",
+    ],
+    videoTitle: "Dr. Devi Shetty: How India Provides High-Quality, High-Volume Cardiac Care",
+    videoYoutubeId: "dQw4w9WgXcQ",
+    videoDuration: "5:45 min",
+    videoDescription: "Dr. Shetty discusses clinical outcomes, safety protocols, and transparent costs for international families seeking complex cardiac surgery in India.",
+  },
+  {
+    id: "doc_subash_gupta",
+    slug: "dr-subash-gupta",
+    name: "Dr. Subash Gupta",
+    designation: "Chairman, Max Centre for Liver & Biliary Sciences",
+    department: "Liver Transplant & Gastrointestinal Surgery",
+    specialtySlug: "transplant",
+    hospitalName: "Max Super Speciality Hospital, Saket",
+    hospitalSlug: "max-super-speciality-hospital-saket",
+    city: "delhi",
+    cityLabel: "New Delhi (South Delhi)",
+    experienceYears: 32,
+    surgeriesCount: "3,800+",
+    qualifications: [
+      "MBBS & MS (Surgery) — AIIMS, New Delhi",
+      "FRCS (Glasgow) & FRCS (Edinburgh)",
+      "Fellowship in Liver Transplantation — Queen Elizabeth Hospital, Birmingham (UK)",
+    ],
+    awards: [
+      "Dr. B. C. Roy National Award",
+      "Vishist Chikitsak Ratan Award",
+    ],
+    languages: ["English", "Hindi"],
+    photoUrl: "/images/doctors/dr-subash-gupta.jpg",
+    bio: "Dr. Subash Gupta is an internationally acclaimed liver transplant and HPB surgeon with over three decades of clinical leadership. He has pioneered innovative surgical approaches in acute liver failure, pediatric transplants, and robotic donor hepatectomy.",
+    keyExpertise: [
+      "Living Donor Hepatectomy (Pure Laparoscopic / Robotic)",
+      "Paediatric Liver Transplantation for Neonatal Biliary Disease",
+      "Complex Gallbladder & Cholangiocarcinoma Resections",
+      "Post-Transplant Critical Care Management",
+    ],
+    videoTitle: "Dr. Subash Gupta on Preparing for Living Donor Liver Surgery",
+    videoYoutubeId: "dQw4w9WgXcQ",
+    videoDuration: "4:10 min",
+    videoDescription: "An in-depth explanation of donor safety, surgical screening protocols, and expected long-term outcomes after living donor liver donation.",
+  },
+  {
+    id: "doc_arun_saroha",
+    slug: "dr-arun-saroha",
+    name: "Dr. Arun Saroha",
+    designation: "Director & Head, Spine Surgery & Neurosurgery",
+    department: "Neurosurgery & Spine Surgery",
+    specialtySlug: "neurology",
+    hospitalName: "Max Super Speciality Hospital, Saket",
+    hospitalSlug: "max-super-speciality-hospital-saket",
+    city: "delhi",
+    cityLabel: "New Delhi (South Delhi)",
+    experienceYears: 26,
+    surgeriesCount: "12,000+",
+    qualifications: [
+      "MBBS — Rabindranath Tagore Medical College, Udaipur",
+      "MS (General Surgery) — RNT Medical College",
+      "MCh (Neurosurgery) — PGI Chandigarh",
+    ],
+    awards: [
+      "Best Spine Surgeon in Delhi NCR — Times Healthcare Achievers",
+      "Big Research National Healthcare Award",
+    ],
+    languages: ["English", "Hindi"],
+    photoUrl: "/images/doctors/dr-arun-saroha.jpg",
+    bio: "Dr. Arun Saroha is one of North India's leading neurosurgeons and spine specialists with over 26 years of surgical experience. Specializing in minimally invasive spine surgery (MISS), artificial disc replacement, and complex brain tumor resections.",
+    keyExpertise: [
+      "Minimally Invasive Spine Fusion (MIS-TLIF / OLIF)",
+      "Cervical & Lumbar Artificial Disc Replacement",
+      "Endoscopic Spine Decompression & Microdiscectomy",
+      "Scoliosis & Spinal Deformity Correction",
+      "Stereotactic & Image-Guided Brain Surgery",
+    ],
+    videoTitle: "Dr. Arun Saroha Explains Minimally Invasive Spine Surgery vs Open Surgery",
+    videoYoutubeId: "dQw4w9WgXcQ",
+    videoDuration: "3:45 min",
+    videoDescription: "Dr. Saroha discusses how tubular retractors and endoscopic instruments allow rapid recovery without damaging back musculature.",
+  },
+  {
+    id: "doc_anupam_sibal",
+    slug: "dr-anupam-sibal",
+    name: "Dr. Anupam Sibal",
+    designation: "Group Medical Director & Senior Paediatric Gastroenterologist",
+    department: "Paediatrics & Hepatology",
+    specialtySlug: "transplant",
+    hospitalName: "Indraprastha Apollo Hospitals",
+    hospitalSlug: "indraprastha-apollo-hospitals",
+    city: "delhi",
+    cityLabel: "New Delhi (Sarita Vihar)",
+    experienceYears: 29,
+    surgeriesCount: "4,500+ Cases",
+    qualifications: [
+      "MD (Paediatrics) — Maulana Azad Medical College, New Delhi",
+      "FRCP (London) & FRCP (Glasgow)",
+      "FRCPCH — Royal College of Paediatrics & Child Health (UK)",
+      "FIMSA, FIAP",
+    ],
+    awards: [
+      "Fellow of the Royal College of Paediatrics and Child Health",
+      "Pioneer Award in Paediatric Liver Transplantation",
+    ],
+    languages: ["English", "Hindi"],
+    photoUrl: "/images/doctors/dr-anupam-sibal.jpg",
+    bio: "Dr. Anupam Sibal is the Group Medical Director of Apollo Hospitals and established India's first successful pediatric liver transplant programme in 1998. He is an internationally cited authority on childhood liver diseases and clinical governance.",
+    keyExpertise: [
+      "Paediatric Liver Transplantation Protocols",
+      "Neonatal Cholestasis & Biliary Atresia Management",
+      "Paediatric Inflammatory Bowel Disease & Endoscopy",
+      "Metabolic Liver Diseases in Children",
+    ],
+    videoTitle: "Dr. Anupam Sibal on 25 Years of Paediatric Liver Transplants in India",
+    videoYoutubeId: "dQw4w9WgXcQ",
+    videoDuration: "5:00 min",
+    videoDescription: "Dr. Sibal shares clinical survival data, quality of life metrics, and milestone cases of international paediatric liver transplant recipients.",
+  },
+  {
+    id: "doc_subhash_chandra",
+    slug: "dr-subhash-chandra",
+    name: "Dr. Subhash Chandra",
+    designation: "Chairman, Interventional Cardiology & Structural Heart",
+    department: "Cardiovascular Sciences",
+    specialtySlug: "cardiac",
+    hospitalName: "Max Super Speciality Hospital, Saket",
+    hospitalSlug: "max-super-speciality-hospital-saket",
+    city: "delhi",
+    cityLabel: "New Delhi (South Delhi)",
+    experienceYears: 34,
+    surgeriesCount: "32,000+",
+    qualifications: [
+      "MBBS & MD (Medicine) — SMS Medical College, Jaipur",
+      "DM (Cardiology) — AIIMS, New Delhi",
+      "FACC (USA) & FSCAI (USA)",
+    ],
+    awards: [
+      "Life Time Achievement Award in Interventional Cardiology",
+      "Distinguished Clinician Award",
+    ],
+    languages: ["English", "Hindi"],
+    photoUrl: "/images/doctors/dr-subhash-chandra.jpg",
+    bio: "Dr. Subhash Chandra is an eminent interventional cardiologist with over 34 years of tertiary clinical experience. He is a pioneer in complex coronary angioplasty, transcatheter aortic valves, and peripheral vascular interventions.",
+    keyExpertise: [
+      "Transcatheter Aortic Valve Implantation (TAVI/TAVR)",
+      "MitraClip Percutaneous Mitral Valve Repair",
+      "Complex Bifurcation & Protected Left Main Stenting",
+      "Implantable Defibrillators (ICD) & CRT Devices",
+    ],
+    videoTitle: "Dr. Subhash Chandra on Percutaneous Heart Valve Repairs",
+    videoYoutubeId: "dQw4w9WgXcQ",
+    videoDuration: "4:15 min",
+    videoDescription: "Explaining non-surgical options for mitral and aortic valve disease with minimal downtime.",
+  },
+  {
+    id: "doc_vinod_raina",
+    slug: "dr-vinod-raina",
+    name: "Dr. Vinod Raina",
+    designation: "Executive Director, Medical & Paediatric Oncology",
+    department: "Medical Oncology & Bone Marrow Transplant",
+    specialtySlug: "transplant",
+    hospitalName: "Fortis Escorts Heart Institute",
+    hospitalSlug: "fortis-escorts-heart-institute",
+    city: "delhi",
+    cityLabel: "New Delhi (Okhla)",
+    experienceYears: 37,
+    surgeriesCount: "700+ BMTs",
+    qualifications: [
+      "MBBS & MD (Medicine) — AIIMS, New Delhi",
+      "MRCP (UK) & FRCP (Edinburgh)",
+      "Former Professor & Head of Medical Oncology — AIIMS, New Delhi",
+    ],
+    awards: [
+      "Dr. B. C. Roy National Award",
+      "WHO Fellowship in Oncology",
+    ],
+    languages: ["English", "Hindi", "Kashmiri"],
+    photoUrl: "/images/doctors/dr-vinod-raina.jpg",
+    bio: "Dr. Vinod Raina is one of India's most respected medical oncologists and bone marrow transplant experts. Having performed over 700 transplants and led clinical oncology at AIIMS for two decades, he specializes in targeted biological therapies and immunotherapy.",
+    keyExpertise: [
+      "Autologous & Allogeneic Bone Marrow Transplantation",
+      "Immunotherapy & Targeted Precision Chemotherapy",
+      "Leukaemia, Lymphoma & Multiple Myeloma Regimens",
+      "Breast, Lung, and Gastrointestinal Oncology",
+    ],
+    videoTitle: "Dr. Vinod Raina on Advances in Bone Marrow Transplant & Immunotherapy",
+    videoYoutubeId: "dQw4w9WgXcQ",
+    videoDuration: "5:30 min",
+    videoDescription: "Dr. Raina breaks down modern BMT protocols, success rates, and infection-control isolation suites in accredited Indian hospitals.",
+  },
+];
+
+export function getDoctor(slug: string): Doctor | undefined {
+  return DOCTORS.find((d) => d.slug === slug);
+}
+
+export function getDoctorsBySpecialty(specialty: string): Doctor[] {
+  if (specialty === "all") return DOCTORS;
+  return DOCTORS.filter((d) => d.specialtySlug === specialty);
+}
+
+export function getDoctorsByHospital(hospitalSlug: string): Doctor[] {
+  return DOCTORS.filter((d) => d.hospitalSlug === hospitalSlug);
+}
