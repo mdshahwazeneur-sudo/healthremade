@@ -72,19 +72,19 @@ export function Navbar() {
         </div>
       </div>
 
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-3 sm:px-6">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-3 shrink-0 group py-1">
+        <Link href="/" className="flex items-center gap-2 sm:gap-3 shrink-0 group py-1">
           <img
             src="/images/logo.png"
             alt="healthremade Logo"
-            className="h-14 w-14 sm:h-16 sm:w-16 object-contain rounded-xl transition-transform group-hover:scale-105"
+            className="h-9 w-9 sm:h-14 sm:w-14 object-contain rounded-xl transition-transform group-hover:scale-105"
           />
           <div className="flex flex-col">
-            <span className="text-2xl sm:text-2xl font-black tracking-tight text-foreground leading-none">
+            <span className="text-lg sm:text-2xl font-black tracking-tight text-foreground leading-none">
               health<span className="text-brand-600">remade</span>
             </span>
-            <span className="text-[11px] text-muted-foreground font-bold uppercase tracking-wider mt-1">
+            <span className="text-[9px] sm:text-[11px] text-muted-foreground font-bold uppercase tracking-wider mt-0.5 sm:mt-1">
               Medical Care India
             </span>
           </div>
@@ -186,30 +186,35 @@ export function Navbar() {
         </div>
 
         {/* Mobile toggle */}
-        <div className="flex items-center gap-2 lg:hidden">
-          <LanguageSelector className="px-2 py-1 text-[11px]" />
+        <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden shrink-0">
           <Button
             variant="accent"
             size="sm"
             onClick={() => openQuoteModal()}
-            className="text-xs px-2.5 py-1"
+            className="text-[11px] sm:text-xs px-2.5 sm:px-3 py-1 h-8 font-bold shadow-xs"
           >
             Free Quote
           </Button>
           <button
-            className="rounded-md p-2 text-foreground hover:bg-slate-100"
+            className="rounded-lg p-1.5 text-foreground hover:bg-slate-100 focus:outline-none"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
           >
-            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {mobileOpen ? <X className="h-6 w-6 text-slate-700" /> : <Menu className="h-6 w-6 text-slate-700" />}
           </button>
         </div>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-border bg-white px-4 pb-6 pt-4 max-h-[80vh] overflow-y-auto">
-          <div className="mb-3 rounded-xl bg-emerald-50 border border-emerald-200 p-3 flex items-center justify-between">
+        <div className="lg:hidden border-t border-border bg-white px-4 pb-6 pt-3 max-h-[80vh] overflow-y-auto space-y-3">
+          {/* Mobile Language Selector row */}
+          <div className="flex items-center justify-between py-1 border-b border-slate-100">
+            <span className="text-xs font-bold text-slate-600">Select Language:</span>
+            <LanguageSelector className="text-xs py-1 px-2.5" />
+          </div>
+
+          <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-3 flex items-center justify-between">
             <div>
               <p className="text-xs font-bold text-emerald-900">Need Instant Assistance?</p>
               <p className="text-[11px] text-emerald-700">Chat with a medical coordinator</p>

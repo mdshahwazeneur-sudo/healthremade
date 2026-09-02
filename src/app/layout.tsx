@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import { Navbar } from '@/components/layout/Navbar'
 import { Footer } from '@/components/layout/Footer'
@@ -9,6 +9,13 @@ import { WhatsAppFloat } from '@/components/ui/WhatsAppFloat'
 import { AdminDataProvider } from '@/context/AdminDataContext'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#0d9488',
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
