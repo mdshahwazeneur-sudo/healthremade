@@ -32,10 +32,10 @@ export function ProcedureCardActions({
           e.stopPropagation()
           openQuoteModal({ treatment: procedureName })
         }}
-        className="flex-1 text-xs py-1.5 font-bold shadow-2xs"
+        className="flex-1 h-9 text-xs font-bold shadow-2xs inline-flex items-center justify-center gap-1.5"
       >
-        <FileText className="h-3 w-3 mr-1" />
-        Get Quote
+        <FileText className="h-3.5 w-3.5" />
+        <span>Get Quote</span>
       </Button>
 
       <a
@@ -43,10 +43,11 @@ export function ProcedureCardActions({
         target="_blank"
         rel="noopener noreferrer"
         onClick={(e) => e.stopPropagation()}
-        className="inline-flex items-center justify-center rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 p-2 text-xs font-semibold transition-colors"
+        className="flex-1 h-9 inline-flex items-center justify-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 px-3 text-xs font-bold transition-colors shadow-2xs"
         title="Chat on WhatsApp about this procedure"
       >
         <MessageCircle className="h-3.5 w-3.5 fill-[#25D366] text-[#25D366]" />
+        <span>WhatsApp</span>
       </a>
     </div>
   )
@@ -77,10 +78,10 @@ export function HospitalCardActions({
           e.stopPropagation()
           openQuoteModal({ hospital: hospitalName, city })
         }}
-        className="flex-1 text-xs py-1.5 font-bold shadow-2xs"
+        className="flex-1 h-9 text-xs font-bold shadow-2xs inline-flex items-center justify-center gap-1.5"
       >
-        <FileText className="h-3 w-3 mr-1" />
-        Get Quote
+        <FileText className="h-3.5 w-3.5" />
+        <span>Get Quote</span>
       </Button>
 
       <a
@@ -88,10 +89,11 @@ export function HospitalCardActions({
         target="_blank"
         rel="noopener noreferrer"
         onClick={(e) => e.stopPropagation()}
-        className="inline-flex items-center justify-center rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 p-2 text-xs font-semibold transition-colors"
+        className="flex-1 h-9 inline-flex items-center justify-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 px-3 text-xs font-bold transition-colors shadow-2xs"
         title="Enquire on WhatsApp about this hospital"
       >
         <MessageCircle className="h-3.5 w-3.5 fill-[#25D366] text-[#25D366]" />
+        <span>WhatsApp</span>
       </a>
     </div>
   )
@@ -115,10 +117,10 @@ export function CustomPackageCardAction() {
           e.stopPropagation()
           openQuoteModal({ treatment: 'Other Medical Condition' })
         }}
-        className="flex-1 text-xs py-1.5 font-bold shadow-xs bg-amber-500 hover:bg-amber-600 text-slate-950"
+        className="flex-1 h-9 text-xs font-bold shadow-xs bg-amber-500 hover:bg-amber-600 text-slate-950 inline-flex items-center justify-center gap-1.5"
       >
-        <FileText className="h-3.5 w-3.5 mr-1" />
-        Know Yours & Get Estimate
+        <FileText className="h-3.5 w-3.5" />
+        <span>Get Quote</span>
       </Button>
 
       <a
@@ -126,10 +128,11 @@ export function CustomPackageCardAction() {
         target="_blank"
         rel="noopener noreferrer"
         onClick={(e) => e.stopPropagation()}
-        className="inline-flex items-center justify-center rounded-lg bg-[#25D366] text-white hover:bg-[#1EBE5D] p-2 text-xs font-semibold transition-colors shadow-2xs"
+        className="flex-1 h-9 inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#25D366] text-white hover:bg-[#1EBE5D] px-3 text-xs font-bold transition-colors shadow-2xs"
         title="Chat on WhatsApp about custom package"
       >
         <MessageCircle className="h-3.5 w-3.5 fill-white text-white" />
+        <span>WhatsApp</span>
       </a>
     </div>
   )

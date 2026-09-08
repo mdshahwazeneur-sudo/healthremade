@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { Stethoscope, Award, GraduationCap, Video, CheckCircle2, ChevronRight, ArrowRight } from 'lucide-react'
+import { Stethoscope, Award, GraduationCap, Video, CheckCircle2, ChevronRight, ArrowRight, MessageCircle } from 'lucide-react'
 import { DOCTORS } from '@/data/doctors'
 import { Badge, Card, CardContent, Button } from '@/components/ui/primitives'
 import { useQuote } from '@/components/ui/QuoteModal'
@@ -102,18 +102,19 @@ export function HomeTopDoctors() {
                           hospital: doc.hospitalName,
                         })
                       }
-                      className="w-full text-xs font-bold"
+                      className="flex-1 h-9 text-xs font-bold inline-flex items-center justify-center gap-1 shadow-2xs"
                     >
-                      Book Opinion
+                      <span>Book Opinion</span>
                     </Button>
                     <a
                       href={docWaUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-xl bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors"
+                      className="flex-1 h-9 inline-flex items-center justify-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100 px-3 text-xs font-bold transition-colors shadow-2xs"
                       title="Chat regarding doctor opinion"
                     >
-                      <ArrowRight className="h-4 w-4" />
+                      <MessageCircle className="h-3.5 w-3.5 fill-[#25D366] text-[#25D366]" />
+                      <span>WhatsApp</span>
                     </a>
                   </div>
                 </CardContent>
