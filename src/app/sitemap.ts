@@ -4,6 +4,7 @@ import { HOSPITALS } from '@/data/hospitals'
 import { MOCK_BLOG_POSTS } from '@/data/adminData'
 import { INITIAL_SEO_BLOG_POSTS } from '@/data/blogPipelineData'
 import { INITIAL_LANDING_PAGES } from '@/data/landingPagesData'
+import { NEWS_ARTICLES } from '@/data/newsData'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
@@ -16,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/pricing`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: `${SITE_URL}/doctors`, lastModified: now, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${SITE_URL}/blog`, lastModified: now, changeFrequency: 'daily', priority: 0.85 },
+    { url: `${SITE_URL}/news`, lastModified: now, changeFrequency: 'daily', priority: 0.9 },
     { url: `${SITE_URL}/how-we-work`, lastModified: now, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${SITE_URL}/verified-outcomes`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${SITE_URL}/visa-and-travel`, lastModified: now, changeFrequency: 'monthly', priority: 0.7 },
@@ -58,6 +60,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.9,
   }))
 
+  // News & Updates articles
+  const newsPages: MetadataRoute.Sitemap = NEWS_ARTICLES.map((article) => ({
+    url: `${SITE_URL}/news/${article.slug}`,
+    lastModified: article.updatedAt || article.publishedAt || now,
+    changeFrequency: 'weekly',
+    priority: 0.85,
+  }))
+
   // Hospital pages
   const hospitalPages: MetadataRoute.Sitemap = HOSPITALS.map((h) => ({
     url: `${SITE_URL}/hospitals/${h.city}/${h.slug}`,
@@ -71,6 +81,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...treatmentPages,
     ...publishedSeoBlogPages,
     ...legacyBlogPages,
+    ...newsPages,
     ...publishedLpPages,
     ...hospitalPages,
   ]

@@ -22,10 +22,12 @@ const TRUST_LINKS = [
   { label: 'Verified Outcomes', href: '/verified-outcomes' },
   { label: 'Pricing Explorer', href: '/pricing' },
   { label: 'Partner Hospitals', href: '/hospitals' },
+  { label: 'News & Updates', href: '/news' },
 ]
 
 const PATIENT_LINKS = [
   { label: 'Visa & Travel Guide', href: '/visa-and-travel' },
+  { label: 'Medical Guides & Blog', href: '/blog' },
   { label: 'Patient Dashboard', href: '/login' },
   { label: 'Create Account', href: '/register' },
 ]
