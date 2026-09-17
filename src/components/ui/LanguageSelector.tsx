@@ -27,6 +27,31 @@ export const SUPPORTED_LANGUAGES: Language[] = [
   { code: 'tr', name: 'Turkish', nativeName: 'Türkçe', flag: '🇹🇷', direction: 'ltr' },
 ]
 
+export function useActiveLanguage() {
+  const [currentLang, setCurrentLang] = useState<string>('en')
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('healthremade_lang')
+      if (saved) setCurrentLang(saved)
+    } catch (e) {
+      // ignore SSR
+    }
+
+    const handler = (e: Event) => {
+      const customEvent = e as CustomEvent<string>
+      if (customEvent.detail) {
+        setCurrentLang(customEvent.detail)
+      }
+    }
+
+    window.addEventListener('healthremade_lang_changed', handler)
+    return () => window.removeEventListener('healthremade_lang_changed', handler)
+  }, [])
+
+  return currentLang
+}
+
 export function LanguageSelector({ className = '' }: { className?: string }) {
   const [selectedLang, setSelectedLang] = useState<Language>(SUPPORTED_LANGUAGES[0])
 
@@ -35,7 +60,10 @@ export function LanguageSelector({ className = '' }: { className?: string }) {
       const saved = localStorage.getItem('healthremade_lang')
       if (saved) {
         const found = SUPPORTED_LANGUAGES.find((l) => l.code === saved)
-        if (found) setSelectedLang(found)
+        if (found) {
+          setSelectedLang(found)
+          window.dispatchEvent(new CustomEvent('healthremade_lang_changed', { detail: found.code }))
+        }
       }
     } catch (e) {
       // ignore SSR
@@ -51,6 +79,7 @@ export function LanguageSelector({ className = '' }: { className?: string }) {
       } else {
         document.documentElement.dir = 'ltr'
       }
+      window.dispatchEvent(new CustomEvent('healthremade_lang_changed', { detail: lang.code }))
     } catch (e) {
       // ignore
     }

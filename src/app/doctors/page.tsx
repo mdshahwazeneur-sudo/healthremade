@@ -54,6 +54,8 @@ export default function DoctorsPage() {
     { id: 'transplant', label: 'Organ Transplant' },
     { id: 'orthopaedics', label: 'Orthopaedics & Joint' },
     { id: 'neurology', label: 'Spine & Neurosurgery' },
+    { id: 'oncology', label: 'Cancer & Oncology' },
+    { id: 'ivf', label: 'IVF & Fertility' },
   ]
 
   const cities = [

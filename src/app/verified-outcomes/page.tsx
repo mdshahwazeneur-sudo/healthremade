@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { ArrowRight, CheckCircle2, ShieldCheck, HelpCircle } from 'lucide-react'
+import { ArrowRight, CheckCircle2, ShieldCheck, HelpCircle, Video } from 'lucide-react'
 import { Badge, Button, Card, CardContent } from '@/components/ui/primitives'
 import { OutcomeStat } from '@/components/ui/medical'
 import { JsonLd } from '@/components/ui/primitives'
 import { buildBreadcrumbSchema } from '@/lib/schema'
 import { OutcomesHeroCTA, OutcomesBottomCTA } from '@/components/outcomes/OutcomesCTAs'
+import { CloudflareVideoTestimonialPlayer } from '@/components/testimonials/CloudflareVideoTestimonialPlayer'
 
 export const metadata: Metadata = {
   title: 'Verified Patient Outcomes & Hospital Success Metrics | healthremade',
@@ -101,6 +102,26 @@ export default function VerifiedOutcomesPage() {
             <OutcomeStat label="Surgeon Seniority" value="15+ Yrs" subtext="Average lead surgeon exp." />
             <OutcomeStat label="Free Quotes Given" value="1,000+" subtext="Multiple hospital choices" />
           </div>
+        </div>
+      </section>
+
+      {/* ─── 2.5 Video Testimonials with Real-time Multi-Language Subtitles ── */}
+      <section className="bg-slate-950 px-4 py-16 sm:px-6 border-b border-slate-800 text-white">
+        <div className="mx-auto max-w-6xl space-y-6">
+          <div className="text-center max-w-3xl mx-auto mb-8">
+            <div className="inline-flex items-center gap-1.5 rounded-full bg-brand-500/20 border border-brand-400/30 px-3.5 py-1 text-xs font-bold text-brand-300 mb-3">
+              <Video className="h-3.5 w-3.5" />
+              <span>Cloudflare Stream Video Testimonials</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Real Patient Stories & Subtitle Translations
+            </h2>
+            <p className="text-sm sm:text-base text-slate-300 mt-2">
+              Select your preferred language in the top menu bar to automatically sync subtitles and interactive video transcripts in real-time across 12 languages.
+            </p>
+          </div>
+
+          <CloudflareVideoTestimonialPlayer />
         </div>
       </section>
 
