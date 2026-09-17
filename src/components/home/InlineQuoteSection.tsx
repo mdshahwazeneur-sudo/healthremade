@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/primitives'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
 import { PROCEDURES } from '@/data/procedures'
 import { sanitizeInput } from '@/lib/security'
+import { submitPatientLead } from '@/lib/supabase/leads'
 
 export interface CountryItem {
   name: string
@@ -70,7 +71,7 @@ export function InlineQuoteSection({
     }
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // Bot check: If honeypot is filled, silent discard
     if (honeypot.trim().length > 0) {
@@ -87,10 +88,19 @@ export function InlineQuoteSection({
     setNotes(cleanNotes)
 
     setIsSubmitting(true)
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setSubmitted(true)
-    }, 600)
+
+    // Save patient lead to Supabase database (with graceful fallback)
+    await submitPatientLead({
+      patientName: cleanName || 'Anonymous Patient',
+      country: selectedCountry,
+      whatsappNumber: cleanPhone,
+      treatmentNeeded: treatment || 'Cardiac Surgery (CABG / Bypass)',
+      medicalSummary: cleanNotes,
+      sourcePage: typeof window !== 'undefined' ? window.location.pathname : undefined,
+    })
+
+    setIsSubmitting(false)
+    setSubmitted(true)
   }
 
   const waUrl = getWhatsAppUrl({

@@ -8,6 +8,7 @@ import { getWhatsAppUrl } from '@/lib/whatsapp'
 import { PROCEDURES } from '@/data/procedures'
 import { COUNTRY_OPTIONS } from '@/components/home/InlineQuoteSection'
 import { sanitizeInput } from '@/lib/security'
+import { submitPatientLead } from '@/lib/supabase/leads'
 
 interface QuoteContextType {
   openQuoteModal: (initialData?: { treatment?: string; hospital?: string; city?: string }) => void
@@ -65,22 +66,37 @@ export function QuoteProvider({ children }: { children: React.ReactNode }) {
     setIsOpen(false)
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (honeypot.trim().length > 0) {
       setSubmitted(true)
       return
     }
 
-    setName(sanitizeInput(name, 100))
-    setPhone(sanitizeInput(phone, 30))
-    setNotes(sanitizeInput(notes, 500))
+    const cleanName = sanitizeInput(name, 100)
+    const cleanPhone = sanitizeInput(phone, 30)
+    const cleanNotes = sanitizeInput(notes, 500)
+
+    setName(cleanName)
+    setPhone(cleanPhone)
+    setNotes(cleanNotes)
 
     setIsSubmitting(true)
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setSubmitted(true)
-    }, 600)
+
+    // Submit lead to Supabase (with fallback if credentials not yet configured)
+    await submitPatientLead({
+      patientName: cleanName || 'Anonymous Patient',
+      country: selectedCountry,
+      whatsappNumber: cleanPhone,
+      treatmentNeeded: treatment || presetData.treatment || 'General Medical Inquiry',
+      preferredHospital: presetData.hospital,
+      preferredCity: cityPref || presetData.city,
+      medicalSummary: cleanNotes,
+      sourcePage: typeof window !== 'undefined' ? window.location.pathname : undefined,
+    })
+
+    setIsSubmitting(false)
+    setSubmitted(true)
   }
 
   const waUrl = getWhatsAppUrl({
