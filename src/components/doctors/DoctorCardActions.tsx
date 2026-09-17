@@ -2,7 +2,8 @@
 
 import React, { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
-import { Play, X, Video, Award, CheckCircle2, MessageCircle, FileText } from 'lucide-react'
+import Link from 'next/link'
+import { Play, X, Video, Award, CheckCircle2, MessageCircle, FileText, UserCheck, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/primitives'
 import { useQuote } from '@/components/ui/QuoteModal'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
@@ -33,7 +34,7 @@ export function DoctorCardActions({ doctor }: { doctor: Doctor }) {
               city: doctor.cityLabel,
             })
           }
-          className="w-full sm:w-auto flex-1 font-bold text-xs py-2 shadow-2xs"
+          className="w-full sm:w-auto flex-1 font-bold text-xs py-2 shadow-2xs h-9"
         >
           <FileText className="h-3.5 w-3.5 mr-1" />
           Get Free Opinion & Quote
@@ -43,20 +44,28 @@ export function DoctorCardActions({ doctor }: { doctor: Doctor }) {
           <button
             type="button"
             onClick={() => setVideoOpen(true)}
-            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 rounded-lg border border-brand-300 bg-brand-50/80 hover:bg-brand-100 text-brand-900 px-3 py-2 text-xs font-semibold transition-colors"
+            className="flex-1 sm:flex-none inline-flex items-center justify-center gap-1.5 rounded-lg border border-brand-300 bg-brand-50/80 hover:bg-brand-100 text-brand-900 px-3 py-2 text-xs font-semibold transition-colors h-9"
           >
             <Play className="h-3.5 w-3.5 fill-brand-700 text-brand-700" />
             Watch Video ({doctor.videoDuration})
           </button>
 
+          <Link
+            href={`/doctors/${doctor.slug}`}
+            className="inline-flex items-center justify-center gap-1 rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-slate-800 px-3 py-2 text-xs font-bold transition-colors h-9 shadow-2xs"
+          >
+            Profile <ChevronRight className="h-3.5 w-3.5" />
+          </Link>
+
           <a
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center rounded-lg bg-[#25D366] text-white hover:bg-[#1EBE5D] p-2 text-xs font-semibold transition-colors shadow-2xs"
+            className="inline-flex items-center justify-center rounded-lg bg-[#25D366] text-white hover:bg-[#1EBE5D] px-3 py-2 text-xs font-bold transition-colors shadow-2xs h-9 gap-1"
             title={`Chat on WhatsApp regarding ${doctor.name}`}
           >
             <MessageCircle className="h-4 w-4 fill-white" />
+            WhatsApp
           </a>
         </div>
       </div>

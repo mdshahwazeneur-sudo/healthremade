@@ -213,9 +213,11 @@ export default function DoctorsPage() {
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
                           <div>
                             <div className="flex flex-wrap items-center gap-2">
-                              <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900">
-                                {doctor.name}
-                              </h2>
+                              <Link href={`/doctors/${doctor.slug}`} className="hover:text-brand-600 transition-colors">
+                                <h2 className="text-xl sm:text-2xl font-extrabold text-slate-900 hover:text-brand-600 transition-colors">
+                                  {doctor.name}
+                                </h2>
+                              </Link>
                               {doctor.awards.length > 0 && (
                                 <Badge
                                   variant="accent"

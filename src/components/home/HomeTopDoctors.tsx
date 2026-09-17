@@ -65,7 +65,7 @@ export function HomeTopDoctors() {
                     </div>
 
                     {/* Name and Designation */}
-                    <Link href={`/doctors#${doc.slug}`} className="block group">
+                    <Link href={`/doctors/${doc.slug}`} className="block group">
                       <h3 className="font-bold text-base text-slate-900 group-hover:text-brand-600 transition-colors leading-snug">
                         {doc.name}
                       </h3>
