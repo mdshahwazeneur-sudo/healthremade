@@ -10,7 +10,7 @@ import { getWhatsAppUrl } from '@/lib/whatsapp'
 
 export function HomeTopDoctors() {
   const { openQuoteModal } = useQuote()
-  const featuredDoctors = DOCTORS.slice(0, 4)
+  const featuredDoctors = DOCTORS
 
   return (
     <section className="bg-slate-50 py-16 px-4 sm:px-6 border-t border-slate-200/80">
@@ -19,21 +19,21 @@ export function HomeTopDoctors() {
           <div>
             <Badge variant="default" className="mb-2">Senior Medical Leadership</Badge>
             <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
-              Top Doctors & Senior Surgeons in India
+              Top Doctors & Senior Specialists in India
             </h2>
             <p className="mt-1 text-sm text-slate-600">
-              Department chairmen, Padma awardees, and US/UK board-certified surgeons with 30,000+ complex procedures.
+              Senior consultants, department directors, and UK/France/Australia fellowship-trained specialists.
             </p>
           </div>
           <Link
             href="/doctors"
             className="inline-flex items-center gap-1 text-sm font-bold text-brand-600 hover:text-brand-700"
           >
-            View All {DOCTORS.length} Senior Doctors <ChevronRight className="h-4 w-4" />
+            View All {DOCTORS.length} Specialists <ChevronRight className="h-4 w-4" />
           </Link>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {featuredDoctors.map((doc) => {
             const docWaUrl = getWhatsAppUrl({
               pageType: 'doctors',

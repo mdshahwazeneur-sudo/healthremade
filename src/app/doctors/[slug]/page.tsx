@@ -70,10 +70,8 @@ export default async function DoctorProfilePage({ params }: DoctorPageProps) {
     { name: doctor.name, url: `${SITE_URL}/doctors/${doctor.slug}` },
   ])
 
-  // Related doctors in same specialty
-  const relatedDoctors = DOCTORS.filter(
-    (d) => d.specialtySlug === doctor.specialtySlug && d.slug !== doctor.slug
-  ).slice(0, 3)
+  // Related specialists
+  const relatedDoctors = DOCTORS.filter((d) => d.slug !== doctor.slug).slice(0, 3)
 
   return (
     <>
@@ -296,10 +294,10 @@ export default async function DoctorProfilePage({ params }: DoctorPageProps) {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
-                  Other Senior Specialists in {doctor.department}
+                  Other Recommended Senior Specialists
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                  Explore peer chairmen and top surgeons for second opinions.
+                  Explore peer department directors and senior surgeons for second opinions.
                 </p>
               </div>
               <Link

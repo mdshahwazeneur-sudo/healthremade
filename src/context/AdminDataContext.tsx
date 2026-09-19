@@ -115,8 +115,13 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   // Load from localStorage on client mount
   useEffect(() => {
     try {
-      const storedDocs = localStorage.getItem('healthremade_doctors')
-      if (storedDocs) setDoctors(JSON.parse(storedDocs))
+      const storedDocs = localStorage.getItem('healthremade_doctors_v2')
+      if (storedDocs) {
+        setDoctors(JSON.parse(storedDocs))
+      } else {
+        setDoctors(INITIAL_DOCTORS)
+        localStorage.setItem('healthremade_doctors_v2', JSON.stringify(INITIAL_DOCTORS))
+      }
 
       const storedBlogs = localStorage.getItem('healthremade_blogs')
       if (storedBlogs) setBlogPosts(JSON.parse(storedBlogs))
@@ -154,19 +159,19 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     }
     const updated = [newDoc, ...doctors]
     setDoctors(updated)
-    localStorage.setItem('healthremade_doctors', JSON.stringify(updated))
+    localStorage.setItem('healthremade_doctors_v2', JSON.stringify(updated))
   }
 
   const updateDoctor = (id: string, docData: Partial<Doctor>) => {
     const updated = doctors.map((d) => (d.id === id ? { ...d, ...docData } : d))
     setDoctors(updated)
-    localStorage.setItem('healthremade_doctors', JSON.stringify(updated))
+    localStorage.setItem('healthremade_doctors_v2', JSON.stringify(updated))
   }
 
   const deleteDoctor = (id: string) => {
     const updated = doctors.filter((d) => d.id !== id)
     setDoctors(updated)
-    localStorage.setItem('healthremade_doctors', JSON.stringify(updated))
+    localStorage.setItem('healthremade_doctors_v2', JSON.stringify(updated))
   }
 
   // Blog Handlers

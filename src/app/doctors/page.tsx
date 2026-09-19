@@ -50,18 +50,13 @@ export default function DoctorsPage() {
 
   const specialties = [
     { id: 'all', label: 'All Specialties' },
-    { id: 'cardiac', label: 'Cardiac Sciences' },
-    { id: 'transplant', label: 'Organ Transplant' },
-    { id: 'orthopaedics', label: 'Orthopaedics & Joint' },
-    { id: 'neurology', label: 'Spine & Neurosurgery' },
-    { id: 'oncology', label: 'Cancer & Oncology' },
-    { id: 'ivf', label: 'IVF & Fertility' },
+    { id: 'oncology', label: 'Cancer & Surgical Oncology' },
+    { id: 'cardiac', label: 'Interventional Cardiology & Heart' },
   ]
 
   const cities = [
     { id: 'all', label: 'All Cities' },
     { id: 'delhi', label: 'Delhi NCR' },
-    { id: 'bangalore', label: 'Bengaluru' },
   ]
 
   const waHeaderUrl = getWhatsAppUrl({
