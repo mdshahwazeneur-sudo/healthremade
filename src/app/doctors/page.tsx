@@ -54,6 +54,7 @@ export default function DoctorsPage() {
     { id: 'cardiac', label: 'Cardiology & Heart Surgeries' },
     { id: 'orthopaedics', label: 'Orthopaedics & Joint Replacement' },
     { id: 'urology', label: 'Urology & Andrology' },
+    { id: 'transplant', label: 'Liver & Organ Transplant' },
   ]
 
   const cities = [
