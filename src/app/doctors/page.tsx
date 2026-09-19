@@ -51,7 +51,9 @@ export default function DoctorsPage() {
   const specialties = [
     { id: 'all', label: 'All Specialties' },
     { id: 'oncology', label: 'Cancer & Surgical Oncology' },
-    { id: 'cardiac', label: 'Interventional Cardiology & Heart' },
+    { id: 'cardiac', label: 'Cardiology & Heart Surgeries' },
+    { id: 'orthopaedics', label: 'Orthopaedics & Joint Replacement' },
+    { id: 'urology', label: 'Urology & Andrology' },
   ]
 
   const cities = [

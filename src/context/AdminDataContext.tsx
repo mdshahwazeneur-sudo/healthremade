@@ -115,12 +115,12 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   // Load from localStorage on client mount
   useEffect(() => {
     try {
-      const storedDocs = localStorage.getItem('healthremade_doctors_v2')
+      const storedDocs = localStorage.getItem('healthremade_doctors_v3')
       if (storedDocs) {
         setDoctors(JSON.parse(storedDocs))
       } else {
         setDoctors(INITIAL_DOCTORS)
-        localStorage.setItem('healthremade_doctors_v2', JSON.stringify(INITIAL_DOCTORS))
+        localStorage.setItem('healthremade_doctors_v3', JSON.stringify(INITIAL_DOCTORS))
       }
 
       const storedBlogs = localStorage.getItem('healthremade_blogs')
@@ -138,40 +138,37 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       const storedProcedures = localStorage.getItem('healthremade_procedures')
       if (storedProcedures) setProcedures(JSON.parse(storedProcedures))
 
-      const storedLps = localStorage.getItem('healthremade_landing_pages')
-      if (storedLps) setLandingPages(JSON.parse(storedLps))
+      const storedLandingPages = localStorage.getItem('healthremade_landing_pages')
+      if (storedLandingPages) setLandingPages(JSON.parse(storedLandingPages))
 
-      const storedTopics = localStorage.getItem('healthremade_blog_topics')
-      if (storedTopics) setBlogTopics(JSON.parse(storedTopics))
+      const storedBlogTopics = localStorage.getItem('healthremade_blog_topics')
+      if (storedBlogTopics) setBlogTopics(JSON.parse(storedBlogTopics))
 
-      const storedSeoBlogs = localStorage.getItem('healthremade_seo_blog_posts')
+      const storedSeoBlogs = localStorage.getItem('healthremade_seo_blogs')
       if (storedSeoBlogs) setSeoBlogPosts(JSON.parse(storedSeoBlogs))
-    } catch (e) {
-      console.error('Failed to load admin data from localStorage:', e)
+    } catch {
+      // ignore storage errors
     }
   }, [])
 
-  // Doctors Handlers
+  // Doctors Actions
   const addDoctor = (doc: Omit<Doctor, 'id'>) => {
-    const newDoc: Doctor = {
-      ...doc,
-      id: `doc_${Date.now()}`,
-    }
+    const newDoc: Doctor = { ...doc, id: `doc_${Date.now()}` }
     const updated = [newDoc, ...doctors]
     setDoctors(updated)
-    localStorage.setItem('healthremade_doctors_v2', JSON.stringify(updated))
+    localStorage.setItem('healthremade_doctors_v3', JSON.stringify(updated))
   }
 
-  const updateDoctor = (id: string, docData: Partial<Doctor>) => {
-    const updated = doctors.map((d) => (d.id === id ? { ...d, ...docData } : d))
+  const updateDoctor = (id: string, partial: Partial<Doctor>) => {
+    const updated = doctors.map((d) => (d.id === id ? { ...d, ...partial } : d))
     setDoctors(updated)
-    localStorage.setItem('healthremade_doctors_v2', JSON.stringify(updated))
+    localStorage.setItem('healthremade_doctors_v3', JSON.stringify(updated))
   }
 
   const deleteDoctor = (id: string) => {
     const updated = doctors.filter((d) => d.id !== id)
     setDoctors(updated)
-    localStorage.setItem('healthremade_doctors_v2', JSON.stringify(updated))
+    localStorage.setItem('healthremade_doctors_v3', JSON.stringify(updated))
   }
 
   // Blog Handlers
