@@ -6,7 +6,7 @@ import { OutcomeStat } from '@/components/ui/medical'
 import { JsonLd } from '@/components/ui/primitives'
 import { buildBreadcrumbSchema } from '@/lib/schema'
 import { OutcomesHeroCTA, OutcomesBottomCTA } from '@/components/outcomes/OutcomesCTAs'
-import { CloudflareVideoTestimonialPlayer } from '@/components/testimonials/CloudflareVideoTestimonialPlayer'
+import { TestimonialsBarView } from '@/components/testimonials/TestimonialsBarView'
 
 export const metadata: Metadata = {
   title: 'Verified Patient Outcomes & Hospital Success Metrics | healthremade',
@@ -111,7 +111,7 @@ export default function VerifiedOutcomesPage() {
           <div className="text-center max-w-3xl mx-auto mb-8">
             <div className="inline-flex items-center gap-1.5 rounded-full bg-brand-500/20 border border-brand-400/30 px-3.5 py-1 text-xs font-bold text-brand-300 mb-3">
               <Video className="h-3.5 w-3.5" />
-              <span>Cloudflare Stream Video Testimonials</span>
+              <span>Verified Patient Video Stories & Transcripts</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
               Real Patient Stories & Subtitle Translations
@@ -121,7 +121,7 @@ export default function VerifiedOutcomesPage() {
             </p>
           </div>
 
-          <CloudflareVideoTestimonialPlayer />
+          <TestimonialsBarView />
         </div>
       </section>
 

@@ -30,6 +30,11 @@ import {
   type MedicalReviewer,
 } from '@/data/blogPipelineData'
 import { generateSeoBlogDraftWithClaude, countNeedsSourceFlags } from '@/lib/blogAi'
+import {
+  PATIENT_TESTIMONIALS as INITIAL_TESTIMONIALS,
+  type PatientTestimonial,
+} from '@/data/testimonialsData'
+import { getVideoPosterUrl } from '@/components/testimonials/VideoTestimonialPlayer'
 
 interface AdminDataContextType {
   // Doctors
@@ -76,6 +81,12 @@ interface AdminDataContextType {
   disputes: DisputeTicket[]
   updateDispute: (id: string, disp: Partial<DisputeTicket>) => void
 
+  // Video Testimonials
+  videoTestimonials: PatientTestimonial[]
+  addVideoTestimonial: (test: PatientTestimonial) => void
+  deleteVideoTestimonial: (id: string) => void
+  updateVideoTestimonial: (id: string, test: Partial<PatientTestimonial>) => void
+
   // Moderation
   moderationItems: OutcomeModerationItem[]
   updateModerationItem: (id: string, item: Partial<OutcomeModerationItem>) => void
@@ -112,6 +123,9 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   const [blogTopics, setBlogTopics] = useState<BlogTopic[]>(INITIAL_BLOG_TOPICS)
   const [seoBlogPosts, setSeoBlogPosts] = useState<SeoBlogPost[]>(INITIAL_SEO_BLOG_POSTS)
 
+  // Video Testimonials State
+  const [videoTestimonials, setVideoTestimonials] = useState<PatientTestimonial[]>(INITIAL_TESTIMONIALS)
+
   // Load from localStorage on client mount
   useEffect(() => {
     try {
@@ -141,11 +155,42 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
       const storedLandingPages = localStorage.getItem('healthremade_landing_pages')
       if (storedLandingPages) setLandingPages(JSON.parse(storedLandingPages))
 
-      const storedBlogTopics = localStorage.getItem('healthremade_blog_topics')
-      if (storedBlogTopics) setBlogTopics(JSON.parse(storedBlogTopics))
+      const storedBlogTopics = localStorage.getItem('healthremade_blog_topics_v2')
+      if (storedBlogTopics) {
+        setBlogTopics(JSON.parse(storedBlogTopics))
+      } else {
+        setBlogTopics(INITIAL_BLOG_TOPICS)
+        localStorage.setItem('healthremade_blog_topics_v2', JSON.stringify(INITIAL_BLOG_TOPICS))
+      }
 
-      const storedSeoBlogs = localStorage.getItem('healthremade_seo_blogs')
-      if (storedSeoBlogs) setSeoBlogPosts(JSON.parse(storedSeoBlogs))
+      const storedSeoBlogs = localStorage.getItem('healthremade_seo_blogs_v2')
+      if (storedSeoBlogs) {
+        setSeoBlogPosts(JSON.parse(storedSeoBlogs))
+      } else {
+        setSeoBlogPosts(INITIAL_SEO_BLOG_POSTS)
+        localStorage.setItem('healthremade_seo_blogs_v2', JSON.stringify(INITIAL_SEO_BLOG_POSTS))
+      }
+
+      const storedVideos = localStorage.getItem('healthremade_video_testimonials_v2')
+      if (storedVideos) {
+        try {
+          const parsed: PatientTestimonial[] = JSON.parse(storedVideos)
+          const healed = parsed.map((item) => {
+            const effectivePoster = getVideoPosterUrl(item.videoUrl, item.posterUrl)
+            return {
+              ...item,
+              posterUrl: effectivePoster,
+            }
+          })
+          setVideoTestimonials(healed)
+          localStorage.setItem('healthremade_video_testimonials_v2', JSON.stringify(healed))
+        } catch {
+          setVideoTestimonials(INITIAL_TESTIMONIALS)
+        }
+      } else {
+        setVideoTestimonials(INITIAL_TESTIMONIALS)
+        localStorage.setItem('healthremade_video_testimonials_v2', JSON.stringify(INITIAL_TESTIMONIALS))
+      }
     } catch {
       // ignore storage errors
     }
@@ -169,6 +214,37 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
     const updated = doctors.filter((d) => d.id !== id)
     setDoctors(updated)
     localStorage.setItem('healthremade_doctors_v5', JSON.stringify(updated))
+  }
+
+  // Video Testimonials Actions
+  const addVideoTestimonial = (testimonial: PatientTestimonial) => {
+    setVideoTestimonials((prev) => {
+      const updated = [testimonial, ...prev]
+      try {
+        localStorage.setItem('healthremade_video_testimonials_v2', JSON.stringify(updated))
+      } catch {}
+      return updated
+    })
+  }
+
+  const deleteVideoTestimonial = (id: string) => {
+    setVideoTestimonials((prev) => {
+      const updated = prev.filter((v) => v.id !== id)
+      try {
+        localStorage.setItem('healthremade_video_testimonials_v2', JSON.stringify(updated))
+      } catch {}
+      return updated
+    })
+  }
+
+  const updateVideoTestimonial = (id: string, partial: Partial<PatientTestimonial>) => {
+    setVideoTestimonials((prev) => {
+      const updated = prev.map((v) => (v.id === id ? { ...v, ...partial } : v))
+      try {
+        localStorage.setItem('healthremade_video_testimonials_v2', JSON.stringify(updated))
+      } catch {}
+      return updated
+    })
   }
 
   // Blog Handlers
@@ -835,6 +911,10 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
         updatePricingRequest,
         disputes,
         updateDispute,
+        videoTestimonials,
+        addVideoTestimonial,
+        deleteVideoTestimonial,
+        updateVideoTestimonial,
         moderationItems,
         updateModerationItem,
         procedures,

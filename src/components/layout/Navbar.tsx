@@ -27,7 +27,8 @@ const NAV_LINKS = [
   { label: 'Hospitals', href: '/hospitals' },
   { label: 'Top Doctors', href: '/doctors' },
   { label: 'Pricing Explorer', href: '/pricing' },
-  { label: 'Verified Outcomes', href: '/verified-outcomes' },
+  { label: 'Testimonials', href: '/testimonials' },
+  { label: 'Cost Guides & Blog', href: '/blog' },
 ]
 
 export function Navbar() {
@@ -187,6 +188,9 @@ export function Navbar() {
 
         {/* Mobile toggle */}
         <div className="flex items-center gap-1.5 sm:gap-2 lg:hidden shrink-0">
+          {/* Mobile Language Selector Button placed BEFORE Free Quote button */}
+          <LanguageSelector className="text-[11px] px-2 py-1 h-8 rounded-lg" compact={true} />
+
           <Button
             variant="accent"
             size="sm"
@@ -195,6 +199,7 @@ export function Navbar() {
           >
             Free Quote
           </Button>
+
           <button
             className="rounded-lg p-1.5 text-foreground hover:bg-slate-100 focus:outline-none"
             onClick={() => setMobileOpen(!mobileOpen)}

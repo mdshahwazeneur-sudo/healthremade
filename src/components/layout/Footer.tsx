@@ -18,6 +18,7 @@ const CITY_LINKS = [
 ]
 
 const TRUST_LINKS = [
+  { label: 'Patient Testimonials', href: '/testimonials' },
   { label: 'How We Work', href: '/how-we-work' },
   { label: 'Verified Outcomes', href: '/verified-outcomes' },
   { label: 'Pricing Explorer', href: '/pricing' },
@@ -26,8 +27,11 @@ const TRUST_LINKS = [
 ]
 
 const PATIENT_LINKS = [
+  { label: 'Treatment Cost Guides & Blog', href: '/blog' },
   { label: 'Visa & Travel Guide', href: '/visa-and-travel' },
-  { label: 'Medical Guides & Blog', href: '/blog' },
+  { label: 'Dental Tourism Guide', href: '/blog/full-mouth-dental-implants-cost-india-all-on-4-guide' },
+  { label: 'CABG Bypass Cost Guide', href: '/blog/heart-bypass-surgery-cost-india-delhi-guide' },
+  { label: 'Robotic Knee Cost Guide', href: '/blog/robotic-knee-replacement-cost-india-recovery-guide' },
   { label: 'Patient Dashboard', href: '/login' },
   { label: 'Create Account', href: '/register' },
 ]
@@ -146,6 +150,30 @@ export function Footer() {
               ))}
             </ul>
           </div>
+        </div>
+
+        {/* Featured Guides Callout Banner */}
+        <div className="mt-8 rounded-2xl bg-gradient-to-r from-brand-50 via-white to-brand-50/60 border border-brand-200/80 p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-2xs">
+          <div className="flex items-center gap-3.5">
+            <div className="h-10 w-10 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-lg shrink-0 shadow-xs">
+              📚
+            </div>
+            <div>
+              <h4 className="text-sm font-bold text-slate-900">
+                Detailed Medical Cost Guides & Procedure Walkthroughs
+              </h4>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Compare USA/UK vs India pricing for Dental Implants, Bypass Surgery, Knee Replacements, Liver Transplants, and IVF.
+              </p>
+            </div>
+          </div>
+          <Link
+            href="/blog"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 text-xs font-bold transition-colors shadow-2xs shrink-0"
+          >
+            <span>Explore All Cost Guides</span>
+            <span>→</span>
+          </Link>
         </div>
 
         <Separator className="my-8" />

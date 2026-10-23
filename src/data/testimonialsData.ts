@@ -30,8 +30,12 @@ export interface PatientTestimonial {
   rating: number
   verified: boolean
   posterUrl: string
-  cloudflareStreamId: string // Cloudflare Stream Video UID
-  fallbackVideoUrl: string // High-res MP4 preview stream
+  videoUrl: string // YouTube URL (e.g. https://www.youtube.com/watch?v=... or https://youtu.be/...) or direct video
+  fallbackVideoUrl?: string
+  cloudflareStreamId?: string
+  transcript?: string // Full video transcript displayed cleanly below the player
+  description?: string // Detailed case background, patient story, and recovery narrative
+  title?: string // Compelling headline for bar and list views
   quote: Record<string, string> // Translated quotes by language code
   subtitles: Record<string, SubtitleCue[]> // Dynamic synchronized subtitle tracks
   fullStory: Record<string, string>
@@ -40,6 +44,7 @@ export interface PatientTestimonial {
 export const PATIENT_TESTIMONIALS: PatientTestimonial[] = [
   {
     id: 'test_1',
+    title: 'UK Patient Avoids 11-Month NHS Waitlist with Beating-Heart Bypass Surgery at Medanta',
     patientName: 'David & Sarah Miller',
     country: 'United Kingdom',
     countryFlag: '🇬🇧',
@@ -57,8 +62,10 @@ export const PATIENT_TESTIMONIALS: PatientTestimonial[] = [
     rating: 5,
     verified: true,
     posterUrl: 'https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=1200&q=80',
-    cloudflareStreamId: '6b24d775df5832a89045fa7d88582736',
+    videoUrl: 'https://www.youtube.com/watch?v=0k2Zzkw43e8',
     fallbackVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    transcript: 'Hello, my name is David Miller from Manchester, England. I was diagnosed with severe triple-vessel coronary artery blockage last winter. NHS waiting times were nearly a year, so we looked at medical tourism in India through healthremade. Dr. Naresh Trehan at Medanta performed a minimally invasive off-pump bypass with zero complications. We saved over $38,000 compared to private UK care, and the hospital felt like a 5-star hotel with world-class doctors.',
+    description: 'Diagnosed with critical 3-vessel coronary artery disease with over 90% occlusion in the LAD and Circumflex arteries. Due to severe angina and an 11-month NHS waiting list, David and his wife Sarah traveled to New Delhi. Dr. Naresh Trehan performed a beating-heart OPCAB bypass using bilateral internal mammary arteries (LIMA/RIMA). Extubated within 5 hours, transferred to room on Day 3, and received full fit-to-fly cardiac clearance on Day 14.',
     quote: {
       en: 'In the UK, the NHS waitlist for triple bypass was 11 months. Dr. Naresh Trehan and healthremade arranged our surgery in Delhi within 4 days of landing. The care was extraordinary.',
       ar: 'في المملكة المتحدة، كانت قائمة انتظار جراحة القلب 11 شهرًا. قام د. تريحان وفريق هيلث ريميد بترتيب الجراحة في دلهي خلال 4 أيام فقط من وصولنا. الرعاية كانت استثنائية.',
@@ -149,6 +156,7 @@ export const PATIENT_TESTIMONIALS: PatientTestimonial[] = [
   },
   {
     id: 'test_2',
+    title: 'UAE Patient Walking Pain-Free on Day 2 After Mako Robotic Knee Replacement at Max Hospital',
     patientName: 'Fatima Al-Nuaimi',
     country: 'United Arab Emirates',
     countryFlag: '🇦🇪',
@@ -166,8 +174,10 @@ export const PATIENT_TESTIMONIALS: PatientTestimonial[] = [
     rating: 5,
     verified: true,
     posterUrl: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1200&q=80',
-    cloudflareStreamId: 'c149b5c2a12903848df749c928419385',
+    videoUrl: 'https://www.youtube.com/watch?v=zpOULjyy-n8',
     fallbackVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    transcript: 'Marhaban. My name is Fatima Al-Mansoor from Dubai, UAE. Chronic knee arthritis had prevented me from walking for over two years. In Germany, the surgery estimate was over $35,000. Through healthremade, Dr. Aman Dua at Max Healthcare performed a robotic knee replacement with subvastus muscle sparing. On the second day I stood and walked without pain. The hospital gave us VIP Arabic translation and concierge care.',
+    description: 'Diagnosed with severe Stage 4 tricompartmental osteoarthritis of both knees, suffering from chronic joint pain and immobility for over 3 years. After exploring joint replacement options in UAE and Germany costing upwards of $35,000, Fatima traveled to Max Hospital in Delhi. Dr. Ashok Rajgopal performed a simultaneous bilateral robotic knee replacement using subvastus muscle-sparing techniques. Fatima was mobilized on Day 2 with complete pain relief and flew home after 14 days of supervised physiotherapy.',
     quote: {
       en: 'I could barely walk 50 meters due to severe osteoarthritis. The robotic surgery at Max Hospital was so precise that I was walking pain-free on the 2nd day. Arabic translators were with us 24/7.',
       ar: 'كنت بالكاد أستطيع المشي 50 مترًا بسبب هشاشة العظام الحادة. كانت الجراحة الروبوتية في مستشفى ماكس دقيقة جدًا لدرجة أنني مشيت بدون ألم في اليوم الثاني. كان المترجمون العرب معنا على مدار الساعة.',
@@ -258,6 +268,7 @@ export const PATIENT_TESTIMONIALS: PatientTestimonial[] = [
   },
   {
     id: 'test_3',
+    title: 'Kenya Patient Given Second Chance at Life with Living Donor Liver Transplant at Apollo Delhi',
     patientName: 'Samuel & Brenda Ochieng',
     country: 'Kenya',
     countryFlag: '🇰🇪',
@@ -275,8 +286,10 @@ export const PATIENT_TESTIMONIALS: PatientTestimonial[] = [
     rating: 5,
     verified: true,
     posterUrl: 'https://images.unsplash.com/photo-1516549655169-df83a0774514?auto=format&fit=crop&w=1200&q=80',
-    cloudflareStreamId: '8f19c3b8a9201948ef12849c09182749',
+    videoUrl: 'https://www.youtube.com/watch?v=kJQP7kiw5Fk',
     fallbackVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    transcript: 'Jambo. My name is Samuel Ochieng from Nairobi, Kenya. I suffered from end-stage liver failure and needed an urgent living donor liver transplant. healthremade handled all legal government committee clearances in Delhi within one week. Dr. Subhash Gupta performed the 12-hour surgery using part of my sister Brenda’s liver. Both our livers regenerated completely, and I am back playing football.',
+    description: 'Diagnosed with end-stage chronic liver failure secondary to cirrhosis with refractory ascites and severe jaundice. With liver transplantation services unavailable locally in East Africa and private Western options exceeding $400,000, Samuel traveled to Apollo Hospitals Delhi with his sister Brenda as a prospective living donor. Following rigorous Authorization Committee clearances, Dr. Subhash Gupta successfully executed a 12-hour right lobe living donor liver transplant. Both patient and donor achieved full graft function with complete liver regeneration verified at 6-week follow-up.',
     quote: {
       en: 'In Nairobi, liver transplantation was unavailable and private US quotes exceeded $400,000. Dr. Subhash Gupta at Apollo Delhi gave me a second chance at life. My sister Brenda was my donor, and both of us are in perfect health.',
       ar: 'في نيروبي، لم تكن زراعة الكبد متوفرة وتجاوزت التكاليف في أمريكا 400,000 دولار. منحني الدكتور سوبهاش جوبتا في أبولو دلهي فرصة ثانية للحياة.',
@@ -363,6 +376,118 @@ export const PATIENT_TESTIMONIALS: PatientTestimonial[] = [
     },
     fullStory: {
       en: 'Samuel was cleared for air travel after 28 days of close post-op monitoring in Delhi. Liver function tests returned to completely normal levels within 6 weeks.',
+    },
+  },
+  {
+    id: 'test_4',
+    title: 'Australian Couple Saves $32,000 on Full Mouth All-on-4 Dental Implants in Delhi with Immediate Loading',
+    patientName: 'Robert & Claire Turner',
+    country: 'Australia',
+    countryFlag: '🇦🇺',
+    city: 'Melbourne',
+    age: 52,
+    procedure: 'Full Mouth All-on-4 Dental Implants (Nobel Biocare & Zirconia)',
+    specialty: 'Dental Care',
+    hospitalName: 'Apollo Dental & Fortis Dental Care',
+    hospitalSlug: 'apollo-hospital-delhi',
+    doctorName: 'Dr. Himanshu Gupta',
+    doctorSlug: 'dr-himanshu-gupta',
+    savingsPercentage: 76,
+    costSavedUsd: '$32,000 Saved',
+    treatmentDate: 'August 2026',
+    rating: 5,
+    verified: true,
+    posterUrl: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=1200&q=80',
+    videoUrl: 'https://www.youtube.com/watch?v=3JZ_D3ELwOQ',
+    fallbackVideoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    transcript: 'G’day, I’m Robert Turner from Melbourne, Australia. I had suffered from failing teeth and uncomfortable dentures for over ten years. Australian dentists quoted nearly fifty thousand dollars for full upper and lower reconstruction. Dr. Himanshu Gupta placed Nobel Biocare implants with 3D guided surgery with virtually zero discomfort. We saved $32,000, enjoyed a wonderful 8-day holiday in India, and I can eat steak and smile again with complete confidence.',
+    description: 'Presented with generalized advanced periodontitis and multiple failing dentitions, rendering chewing painful and necessitating removable prosthetics for over a decade. After receiving quotes exceeding AUD $48,000 in Melbourne, Robert chose Delhi for dental rehabilitation. Dr. Himanshu Gupta performed 3D CBCT guided surgery to place Swiss Nobel Biocare implants with immediate fixed provisional loading within 48 hours, followed by monolithic Zirconia final bridge delivery on Day 7. Full chewing function and aesthetic smile restored with savings over $32,000.',
+    quote: {
+      en: 'In Melbourne, dental clinics quoted us $48,000 for full mouth implants. Dr. Himanshu Gupta in Delhi did the complete All-on-4 with Swiss Nobel Biocare implants and monolithic Zirconia for under $9,000. It transformed my life.',
+      ar: 'في ملبورن، طلبت العيادات 48,000 دولار لزراعة الأسنان الكاملة. أجرى الدكتور هيمانشو جوبتا في دلهي زراعة All-on-4 بالكامل باستخدام زراعات سويسرية وزركونيا متجانسة بأقل من 9,000 دولار. غير ذلك حياتي بالكامل.',
+      ru: 'В Мельбурне нам назвали цену в 48 000 долларов за имплантацию всех зубов. Доктор Химаншу Гупта в Дели провел операцию All-on-4 с имплантами Nobel Biocare менее чем за 9 000 долларов.',
+      fr: 'À Melbourne, le devis était de 48 000 $ pour les implants dentaires. Le Dr Himanshu Gupta à Delhi a réalisé le All-on-4 complet avec Nobel Biocare pour moins de 9 000 $. Une transformation totale.',
+      bn: 'মেলবোর্নে পুরো মুখের ডেন্টাল ইমপ্ল্যান্টের জন্য ৪৮,০০০ ডলার খরচ চাওয়া হয়েছিল। দিল্লিতে ড. হিমাংশু গুপ্তা নোবেল বায়োকেয়ার ও জারকোনিয়া দিয়ে মাত্র ৯,০০০ ডলারের কমে সফলভাবে কাজটি করেন।',
+      es: 'En Melbourne nos presupuestaron $48,000 por implantes dentales completos. El Dr. Himanshu Gupta en Delhi realizó All-on-4 completo con Nobel Biocare por menos de $9,000.',
+      sw: 'Huko Melbourne walitaka $48,000 kwa ajili ya upandikizaji wa meno. Dkt. Himanshu Gupta huko Delhi alifanya All-on-4 nzima kwa chini ya $9,000. Imebadilisha maisha yangu.',
+      uz: 'Melburnda tish implantatsiyasi 48,000 dollar deb baholangan edi. Delida doktor Xomanshu Gupta Nobel Biocare va Zirconia bilan 9,000 dollardan kamroqqa ajoyib qilib berdi.',
+      de: 'In Melbourne verlangten Kliniken 48.000 $ für Vollmundimplantate. Dr. Himanshu Gupta in Delhi führte das All-on-4 mit Nobel Biocare für unter 9.000 $ durch.',
+      tr: 'Melbourne’de tam ağız implantlar için 48.000 dolar istendi. Delhi’de Dr. Himanshu Gupta İsviçre Nobel Biocare ile All-on-4 işlemini 9.000 doların altına kusursuz tamamladı.',
+    },
+    subtitles: {
+      en: [
+        { id: 1, startTime: 0, endTime: 4, text: 'G’day, I’m Robert Turner from Melbourne, Australia.' },
+        { id: 2, startTime: 4, endTime: 9, text: 'I had suffered from failing teeth and uncomfortable dentures for over ten years.' },
+        { id: 3, startTime: 9, endTime: 15, text: 'Australian dentists quoted nearly fifty thousand dollars for full upper and lower reconstruction.' },
+        { id: 4, startTime: 15, endTime: 21, text: 'Dr. Himanshu Gupta placed Nobel Biocare implants with 3D guided surgery with virtually zero discomfort.' },
+        { id: 5, startTime: 21, endTime: 28, text: 'We saved $32,000, enjoyed a wonderful 8-day holiday in India, and I can eat steak and smile again.' },
+      ],
+      ar: [
+        { id: 1, startTime: 0, endTime: 4, text: 'مرحبًا، أنا روبرت تورنر من ملبورن، أستراليا.' },
+        { id: 2, startTime: 4, endTime: 9, text: 'عانيت من تساقط الأسنان وأطقم الأسنان غير المريحة لأكثر من عشر سنوات.' },
+        { id: 3, startTime: 9, endTime: 15, text: 'طلبت العيادات في أستراليا ما يقرب من 50,000 دولار لإعادة تأهيل الفكين بالكامل.' },
+        { id: 4, startTime: 15, endTime: 21, text: 'قام الدكتور هيمانشو جوبتا بوضع زراعات نوبل بيوكير بالجراحة الموجهة ثلاثية الأبعاد دون ألم.' },
+        { id: 5, startTime: 21, endTime: 28, text: 'وفرنا 32,000 دولار، وقضينا عطلة رائعة لمدة 8 أيام في الهند، وأستطيع الابتسام مجددًا.' },
+      ],
+      ru: [
+        { id: 1, startTime: 0, endTime: 4, text: 'Привет, я Роберт Тернер из Мельбурна, Австралия.' },
+        { id: 2, startTime: 4, endTime: 9, text: 'Я мучился с разрушенными зубами и съемными протезами больше 10 лет.' },
+        { id: 3, startTime: 9, endTime: 15, text: 'В Австралии стоматологи запросили около пятидесяти тысяч долларов.' },
+        { id: 4, startTime: 15, endTime: 21, text: 'Доктор Химаншу Гупта установил импланты Nobel Biocare по 3D-направленному протоколу.' },
+        { id: 5, startTime: 21, endTime: 28, text: 'Мы сэкономили 32 000 долларов, отлично провели 8 дней в Индии, и я снова уверенно улыбаюсь.' },
+      ],
+      fr: [
+        { id: 1, startTime: 0, endTime: 4, text: 'Bonjour, je m’appelle Robert Turner de Melbourne, Australie.' },
+        { id: 2, startTime: 4, endTime: 9, text: 'Je souffrais de problèmes dentaires sévères depuis plus de dix ans.' },
+        { id: 3, startTime: 9, endTime: 15, text: 'En Australie, le devis était de près de cinquante mille dollars.' },
+        { id: 4, startTime: 15, endTime: 21, text: 'Le Dr Himanshu Gupta a posé des implants Nobel Biocare avec chirurgie guidée en 3D.' },
+        { id: 5, startTime: 21, endTime: 28, text: 'Nous avons économisé 32 000 $, et j’ai retrouvé un sourire éclatant et ma joie de vivre.' },
+      ],
+      bn: [
+        { id: 1, startTime: 0, endTime: 4, text: 'নমস্কার, আমি অস্ট্রেলিয়ার মেলবোর্ন থেকে রবার্ট টার্নার।' },
+        { id: 2, startTime: 4, endTime: 9, text: 'আমি দশ বছরেরও বেশি সময় ধরে দাঁতের ব্যথায় ভুগেছি।' },
+        { id: 3, startTime: 9, endTime: 15, text: 'অস্ট্রেলিয়ায় দুটি চোয়াল ঠিক করতে প্রায় ৫০,০০০ ডলার চাওয়া হয়েছিল।' },
+        { id: 4, startTime: 15, endTime: 21, text: 'দিল্লিতে ড. হিমাংশু গুপ্তা থ্রি-ডি গাইডেড সার্জারি দিয়ে অত্যন্ত নিখুঁতভাবে ইমপ্ল্যান্ট বসান।' },
+        { id: 5, startTime: 21, endTime: 28, text: 'আমরা ৩২,০০০ ডলার সাশ্রয় করেছি এবং আমি আবার আগের মতো হাসতে পারছি।' },
+      ],
+      es: [
+        { id: 1, startTime: 0, endTime: 4, text: 'Hola, soy Robert Turner de Melbourne, Australia.' },
+        { id: 2, startTime: 4, endTime: 9, text: 'Sufrí con dentaduras postizas incómodas durante más de 10 años.' },
+        { id: 3, startTime: 9, endTime: 15, text: 'En Australia me presupuestaron cerca de 50,000 dólares.' },
+        { id: 4, startTime: 15, endTime: 21, text: 'El Dr. Himanshu Gupta colocó implantes Nobel Biocare con cirugía guiada en 3D.' },
+        { id: 5, startTime: 21, endTime: 28, text: 'Ahorramos $32,000, disfrutamos un viaje hermoso y puedo sonreír con total confianza.' },
+      ],
+      sw: [
+        { id: 1, startTime: 0, endTime: 4, text: 'Habari, naitwa Robert Turner kutoka Melbourne, Australia.' },
+        { id: 2, startTime: 4, endTime: 9, text: 'Nilikuwa na shida ya meno kwa zaidi ya miaka kumi.' },
+        { id: 3, startTime: 9, endTime: 15, text: 'Huko Australia daktari alitaka karibu dola elfu hamsini.' },
+        { id: 4, startTime: 15, endTime: 21, text: 'Dkt. Himanshu Gupta aliweka vipandikizi vya Nobel Biocare bila maumivu yoyote.' },
+        { id: 5, startTime: 21, endTime: 28, text: 'Tulihifadhi $32,000 na nimerudisha tabasamu langu zuri.' },
+      ],
+      uz: [
+        { id: 1, startTime: 0, endTime: 4, text: 'Salom, men Avstraliyaning Melburn shahridan Robert Terner.' },
+        { id: 2, startTime: 4, endTime: 9, text: 'O‘n yildan ortiq tish muammolari bilan qiynaldim.' },
+        { id: 3, startTime: 9, endTime: 15, text: 'Avstraliyada to‘liq tish davolash 50,000 dollar deb aytildi.' },
+        { id: 4, startTime: 15, endTime: 21, text: 'Doktor Xomanshu Gupta 3D raqamli texnologiyalar bilan ajoyib implantlar o‘rnatdi.' },
+        { id: 5, startTime: 21, endTime: 28, text: 'Biz 32,000 dollar tejadik va men yana bemalol jilmayish imkoniyatiga egaman.' },
+      ],
+      de: [
+        { id: 1, startTime: 0, endTime: 4, text: 'Hallo, ich bin Robert Turner aus Melbourne, Australien.' },
+        { id: 2, startTime: 4, endTime: 9, text: 'Ich litt über zehn Jahre lang unter schlechten Zähnen und lockeren Prothesen.' },
+        { id: 3, startTime: 9, endTime: 15, text: 'Australische Zahnärzte veranschlagten fast 50.000 $.' },
+        { id: 4, startTime: 15, endTime: 21, text: 'Dr. Himanshu Gupta setzte Nobel Biocare-Implantate mit 3D-Führung schmerzfrei ein.' },
+        { id: 5, startTime: 21, endTime: 28, text: 'Wir sparten 32.000 $ und ich kann endlich wieder mit Stolz lächeln.' },
+      ],
+      tr: [
+        { id: 1, startTime: 0, endTime: 4, text: 'Merhaba, ben Melbourne Avustralya’dan Robert Turner.' },
+        { id: 2, startTime: 4, endTime: 9, text: 'On yıldan uzun süredir diş problemleri ve takma dişlerle mücadele ediyordum.' },
+        { id: 3, startTime: 9, endTime: 15, text: 'Avustralya’da tam çene implant tedavisi için 50.000 dolara yakın istendi.' },
+        { id: 4, startTime: 15, endTime: 21, text: 'Dr. Himanshu Gupta 3D rehberli cerrahi ile Nobel Biocare implantları acısız uyguladı.' },
+        { id: 5, startTime: 21, endTime: 28, text: '32.000 dolar tasarruf ettik ve yeniden güvenle gülümseyebiliyorum.' },
+      ],
+    },
+    fullStory: {
+      en: 'Robert completed his All-on-4 upper and lower restoration in Delhi over an 8-day stay. Digital impressions and immediate temporary loading gave him full functional teeth in 48 hours.',
     },
   },
 ]

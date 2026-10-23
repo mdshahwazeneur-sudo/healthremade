@@ -183,9 +183,10 @@ export default function HomePage() {
             </div>
             <Link
               href="/pricing"
-              className="inline-flex items-center gap-1 text-sm font-bold text-brand-600 hover:text-brand-700"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-bold text-brand-600 hover:text-brand-700 bg-white border border-brand-200 px-4 py-2 rounded-xl shadow-2xs transition-colors"
             >
-              Explore Full Pricing Table <ChevronRight className="h-4 w-4" />
+              <span>Explore Full Pricing Table</span>
+              <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
 
@@ -279,6 +280,17 @@ export default function HomePage() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Bottom Exploration CTA — especially prominent on phone mode */}
+          <div className="mt-10 flex justify-center text-center">
+            <Link
+              href="/pricing"
+              className="inline-flex items-center gap-2 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base px-7 py-3.5 shadow-md hover:shadow-lg transition-all"
+            >
+              <span>Explore Full Medical Pricing & Treatment Packages</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -297,9 +309,10 @@ export default function HomePage() {
             </div>
             <Link
               href="/hospitals"
-              className="inline-flex items-center gap-1 text-sm font-bold text-brand-600 hover:text-brand-700"
+              className="hidden sm:inline-flex items-center gap-1 text-sm font-bold text-brand-600 hover:text-brand-700 bg-white border border-brand-200 px-4 py-2 rounded-xl shadow-2xs transition-colors"
             >
-              View All {HOSPITALS.length} Partner Hospitals <ChevronRight className="h-4 w-4" />
+              <span>View All Partner Hospitals</span>
+              <ChevronRight className="h-4 w-4" />
             </Link>
           </div>
 
@@ -359,6 +372,17 @@ export default function HomePage() {
               </Card>
             ))}
           </div>
+
+          {/* Bottom Exploration CTA — especially prominent on phone mode */}
+          <div className="mt-10 flex justify-center text-center">
+            <Link
+              href="/hospitals"
+              className="inline-flex items-center gap-2 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base px-7 py-3.5 shadow-md hover:shadow-lg transition-all"
+            >
+              <span>View All Partner Hospitals & Accreditation Details</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -370,6 +394,158 @@ export default function HomePage() {
 
       {/* ─── 8. VERIFIED OUTCOMES: CLINICAL SUCCESS BENCHMARKS ──────── */}
       <HomeVerifiedOutcomes />
+
+      {/* ─── 8.5 FEATURED TREATMENT GUIDES & COST BREAKDOWNS (BLOG) ─── */}
+      <section className="bg-slate-50 py-16 px-4 sm:px-6 border-t border-slate-200">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <Badge variant="default" className="mb-2">Comprehensive Research</Badge>
+              <h2 className="text-2xl font-bold text-slate-900 sm:text-3xl">
+                Medical Treatment Guides & Cost Breakdowns
+              </h2>
+              <p className="mt-1 text-sm text-slate-600">
+                In-depth procedural walkthroughs, implant comparisons, and line-item hospital cost guides verified by chief surgeons.
+              </p>
+            </div>
+            <Link
+              href="/blog"
+              className="hidden sm:inline-flex items-center gap-1.5 text-sm font-bold text-brand-600 hover:text-brand-700 bg-white border border-brand-200 px-4 py-2 rounded-xl shadow-2xs transition-colors"
+            >
+              <span>Explore All Treatment Guides</span>
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                title: 'Full Mouth Dental Implants (All-on-4 / All-on-6) Cost & Tourism Guide',
+                slug: 'full-mouth-dental-implants-cost-india-all-on-4-guide',
+                specialty: 'Dental Tourism',
+                doctor: 'Dr. Himanshu Gupta',
+                savings: 'Save 75-80%',
+                price: '$3,800 - $6,500',
+                usPrice: '$28,000 - $45,000 in US/UK',
+                badgeColor: 'bg-teal-100 text-teal-900 border-teal-200',
+              },
+              {
+                title: 'Heart Bypass Surgery (CABG) Cost & Hospital Comparison Guide',
+                slug: 'heart-bypass-surgery-cost-india-delhi-guide',
+                specialty: 'Cardiac Surgery',
+                doctor: 'Dr. Ritwick Raj Bhuyan',
+                savings: 'Save 80-85%',
+                price: '$4,800 - $7,200',
+                usPrice: '$70,000 - $120,000 in US/UK',
+                badgeColor: 'bg-rose-100 text-rose-900 border-rose-200',
+              },
+              {
+                title: 'Robotic Total Knee Replacement Cost & Fast Track Recovery',
+                slug: 'robotic-knee-replacement-cost-india-recovery-guide',
+                specialty: 'Orthopaedics',
+                doctor: 'Dr. Aman Dua',
+                savings: 'Save 75%',
+                price: '$4,500 - $6,800',
+                usPrice: '$35,000 - $50,000 in US/UK',
+                badgeColor: 'bg-blue-100 text-blue-900 border-blue-200',
+              },
+              {
+                title: 'Living Donor Liver Transplant (LDLT) Protocol & Tariff Guide',
+                slug: 'liver-transplant-cost-india-living-donor-guide',
+                specialty: 'Organ Transplant',
+                doctor: 'Dr. Vivek Vij',
+                savings: 'Save 85%',
+                price: '$28,000 - $35,000',
+                usPrice: '$300,000+ in US/UK',
+                badgeColor: 'bg-purple-100 text-purple-900 border-purple-200',
+              },
+              {
+                title: 'IVF & ICSI Fertility Treatment Package Success Guide',
+                slug: 'ivf-cost-india-fertility-treatment-success-guide',
+                specialty: 'Fertility / IVF',
+                doctor: 'Dr. Shruti Bhatia',
+                savings: 'Save 70%',
+                price: '$3,200 - $4,800',
+                usPrice: '$15,000 - $22,000 in US/UK',
+                badgeColor: 'bg-pink-100 text-pink-900 border-pink-200',
+              },
+              {
+                title: 'Minimally Invasive Spinal Fusion (MIS-TLIF) Cost Guide',
+                slug: 'spinal-fusion-surgery-cost-india-mis-tlif-guide',
+                specialty: 'Spine & Neuro',
+                doctor: 'Dr. Aman Dua',
+                savings: 'Save 78%',
+                price: '$5,500 - $7,800',
+                usPrice: '$65,000 - $90,000 in US/UK',
+                badgeColor: 'bg-amber-100 text-amber-900 border-amber-200',
+              },
+            ].map((guide, idx) => (
+              <div
+                key={idx}
+                className="group flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-2xs hover:shadow-md hover:border-brand-300 transition-all"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${guide.badgeColor}`}>
+                      {guide.specialty}
+                    </span>
+                    <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md">
+                      {guide.savings}
+                    </span>
+                  </div>
+
+                  <Link href={`/blog/${guide.slug}`} className="block">
+                    <h3 className="text-base font-bold text-slate-900 group-hover:text-brand-600 transition-colors leading-snug line-clamp-2">
+                      {guide.title}
+                    </h3>
+                  </Link>
+
+                  <div className="mt-3 flex items-center gap-2 text-xs text-slate-500">
+                    <span>Reviewed by:</span>
+                    <span className="font-semibold text-slate-800">{guide.doctor}</span>
+                  </div>
+
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-baseline justify-between text-xs">
+                    <div>
+                      <span className="text-slate-500 block text-[10px] uppercase tracking-wider font-semibold">India Tariff</span>
+                      <span className="text-base font-extrabold text-brand-700">{guide.price}</span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-slate-400 block text-[10px] line-through">{guide.usPrice}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <Link
+                    href={`/blog/${guide.slug}`}
+                    className="text-xs font-bold text-brand-600 hover:text-brand-700 inline-flex items-center gap-1"
+                  >
+                    Read Guide & Tariffs →
+                  </Link>
+                  <Link
+                    href={`/blog/${guide.slug}`}
+                    className="text-xs text-slate-400 hover:text-slate-600"
+                  >
+                    Full Walkthrough
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Bottom Exploration CTA — especially prominent on phone mode */}
+          <div className="mt-10 flex justify-center text-center">
+            <Link
+              href="/blog"
+              className="inline-flex items-center gap-2 rounded-2xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm sm:text-base px-7 py-3.5 shadow-md hover:shadow-lg transition-all"
+            >
+              <span>Explore All Medical Treatment Guides & Cost Breakdowns</span>
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* ─── 9. FAST WHATSAPP DIRECT CALLOUT ─────────────────────────── */}
       <section className="bg-emerald-50 border-y border-emerald-200 py-12 px-4 sm:px-6">

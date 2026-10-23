@@ -6,7 +6,7 @@ import { ShieldCheck, CheckCircle2, Star, TrendingUp, Users, ChevronRight, Award
 import { Badge, Card, CardContent, Button } from '@/components/ui/primitives'
 import { useQuote } from '@/components/ui/QuoteModal'
 
-import { CloudflareVideoTestimonialPlayer } from '@/components/testimonials/CloudflareVideoTestimonialPlayer'
+import { VideoTestimonialPlayer } from '@/components/testimonials/VideoTestimonialPlayer'
 
 export function HomeVerifiedOutcomes() {
   const { openQuoteModal } = useQuote()
@@ -64,8 +64,8 @@ export function HomeVerifiedOutcomes() {
           </Link>
         </div>
 
-        {/* ─── Cloudflare Stream Multi-Language Video Player ─────────── */}
-        <CloudflareVideoTestimonialPlayer />
+        {/* ─── Verified Patient Video Stories & Transcripts ─────────── */}
+        <VideoTestimonialPlayer />
 
         {/* 4 Outcome Metric Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pt-4">

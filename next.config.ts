@@ -4,7 +4,7 @@ const CSP_HEADER = `
   default-src 'self';
   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.youtube.com https://www.google-analytics.com;
   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-  img-src 'self' blob: data: https://*.supabase.co https://cdn.sanity.io https://images.unsplash.com https://i.ytimg.com https://flagcdn.com;
+  img-src 'self' blob: data: https://*.supabase.co https://cdn.sanity.io https://images.unsplash.com https://i.ytimg.com https://*.ytimg.com https://img.youtube.com https://*.youtube.com https://flagcdn.com;
   font-src 'self' data: https://fonts.gstatic.com;
   frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com;
   connect-src 'self' https://api.whatsapp.com https://wa.me https://*.supabase.co;
@@ -29,6 +29,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "cdn.sanity.io" },
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "i.ytimg.com" },
+      { protocol: "https", hostname: "*.ytimg.com" },
+      { protocol: "https", hostname: "img.youtube.com" },
+      { protocol: "https", hostname: "*.youtube.com" },
+      { protocol: "https", hostname: "flagcdn.com" },
     ],
   },
   async headers() {

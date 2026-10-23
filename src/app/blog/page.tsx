@@ -92,20 +92,49 @@ export default function BlogIndexPage() {
 
       {/* ─── Search & Category Bar ─────────────────────────────────── */}
       <section className="sticky top-16 z-20 border-b border-slate-200 bg-white/95 backdrop-blur-md px-4 py-3 sm:px-6">
-        <div className="mx-auto max-w-5xl flex flex-wrap items-center justify-between gap-3">
-          <div className="relative flex-1 min-w-[240px] max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-            <input
-              type="text"
-              placeholder="Search medical guides, procedures, or doctors..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl border border-slate-300 bg-slate-50 pl-9 pr-4 py-2 text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600"
-            />
+        <div className="mx-auto max-w-5xl space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="relative flex-1 min-w-[240px] max-w-md">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <input
+                type="text"
+                placeholder="Search medical guides, procedures, or doctors..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-xl border border-slate-300 bg-slate-50 pl-9 pr-4 py-2 text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-slate-500 font-semibold">{filtered.length} Published Guides</span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-500 font-semibold">{filtered.length} Published Articles</span>
+          {/* Category Filter Pills */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
+            {[
+              { id: 'all', label: 'All Specialties' },
+              { id: 'Cardiac Surgery', label: 'Cardiac Surgery' },
+              { id: 'Orthopaedics', label: 'Orthopaedics' },
+              { id: 'Organ Transplant', label: 'Organ Transplant' },
+              { id: 'Oncology', label: 'Oncology & Cancer' },
+              { id: 'Urology', label: 'Urology & Andrology' },
+              { id: 'Fertility & IVF', label: 'Fertility & IVF' },
+              { id: 'Dental Care', label: 'Dental Tourism' },
+              { id: 'Spine & Neurology', label: 'Spine Surgery' },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-3 py-1 rounded-full font-bold whitespace-nowrap transition-colors border ${
+                  selectedCategory === cat.id
+                    ? 'bg-brand-600 text-white border-brand-600 shadow-2xs'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 border-slate-200'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
           </div>
         </div>
       </section>
