@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next'
 import { PROCEDURES } from '@/data/procedures'
 import { HOSPITALS } from '@/data/hospitals'
+import { DOCTORS } from '@/data/doctors'
 import { MOCK_BLOG_POSTS } from '@/data/adminData'
 import { INITIAL_SEO_BLOG_POSTS } from '@/data/blogPipelineData'
 import { INITIAL_LANDING_PAGES } from '@/data/landingPagesData'
@@ -25,6 +26,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/treatments`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${SITE_URL}/hospitals`, lastModified: now, changeFrequency: 'weekly', priority: 0.8 },
   ]
+
+  // Doctor individual profiles
+  const doctorPages: MetadataRoute.Sitemap = DOCTORS.map((doc) => ({
+    url: `${SITE_URL}/doctors/${doc.slug}`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.85,
+  }))
+
+  // Specialty hub pages
+  const specialties = Array.from(new Set(PROCEDURES.map((p) => p.specialty)))
+  const specialtyPages: MetadataRoute.Sitemap = specialties.map((spec) => ({
+    url: `${SITE_URL}/treatments/${spec}`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.85,
+  }))
 
   // Treatment pages
   const treatmentPages: MetadataRoute.Sitemap = PROCEDURES.map((proc) => ({
@@ -77,8 +95,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }))
 
-  return [
+  // Deduplicate by URL
+  const allEntries = [
     ...staticPages,
+    ...doctorPages,
+    ...specialtyPages,
     ...treatmentPages,
     ...publishedSeoBlogPages,
     ...legacyBlogPages,
@@ -86,4 +107,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...publishedLpPages,
     ...hospitalPages,
   ]
+
+  const seen = new Set<string>()
+  return allEntries.filter((item) => {
+    if (seen.has(item.url)) return false
+    seen.add(item.url)
+    return true
+  })
 }
+

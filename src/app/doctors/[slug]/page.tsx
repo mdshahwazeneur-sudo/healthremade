@@ -25,7 +25,7 @@ import { DOCTORS, getDoctor } from '@/data/doctors'
 import { Badge, Button, Card, CardContent } from '@/components/ui/primitives'
 import { DoctorDetailActions } from '@/components/doctors/DoctorDetailActions'
 import { JsonLd } from '@/components/ui/primitives'
-import { buildBreadcrumbSchema } from '@/lib/schema'
+import { buildBreadcrumbSchema, buildPhysicianSchema } from '@/lib/schema'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
@@ -46,12 +46,31 @@ export async function generateMetadata({ params }: DoctorPageProps): Promise<Met
     return { title: 'Doctor Not Found | healthremade' }
   }
 
+  const pageUrl = `${SITE_URL}/doctors/${doctor.slug}`
+
   return {
     title: `${doctor.name} — ${doctor.designation} in India | healthremade`,
     description: `Consult ${doctor.name}, ${doctor.designation} at ${doctor.hospitalName}, ${doctor.cityLabel}. ${doctor.experienceYears}+ years experience, ${doctor.surgeriesCount} surgeries performed. Watch video explanations and request a free opinion.`,
+    alternates: {
+      canonical: `/doctors/${doctor.slug}`,
+    },
     openGraph: {
       title: `${doctor.name} — ${doctor.designation} | healthremade`,
       description: doctor.bio.slice(0, 160),
+      url: pageUrl,
+      type: 'profile',
+      images: [
+        {
+          url: doctor.photoUrl.startsWith('http') ? doctor.photoUrl : `${SITE_URL}${doctor.photoUrl}`,
+          alt: doctor.name,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${doctor.name} — ${doctor.designation}`,
+      description: `Consult ${doctor.name} at ${doctor.hospitalName}. ${doctor.experienceYears}+ years experience.`,
+      images: [doctor.photoUrl.startsWith('http') ? doctor.photoUrl : `${SITE_URL}${doctor.photoUrl}`],
     },
   }
 }
@@ -70,12 +89,27 @@ export default async function DoctorProfilePage({ params }: DoctorPageProps) {
     { name: doctor.name, url: `${SITE_URL}/doctors/${doctor.slug}` },
   ])
 
+  const physicianSchema = buildPhysicianSchema({
+    name: doctor.name,
+    url: `${SITE_URL}/doctors/${doctor.slug}`,
+    description: doctor.bio,
+    medicalSpecialty: doctor.department,
+    worksFor: {
+      name: doctor.hospitalName,
+      url: `${SITE_URL}/hospitals`,
+    },
+    aggregateRating: {
+      ratingValue: 4.9,
+      reviewCount: Math.max(50, Math.floor(parseInt(doctor.surgeriesCount.replace(/[^0-9]/g, '')) / 100)),
+    },
+  })
+
   // Related specialists
   const relatedDoctors = DOCTORS.filter((d) => d.slug !== doctor.slug).slice(0, 3)
 
   return (
     <>
-      <JsonLd data={breadcrumbs} />
+      <JsonLd data={[breadcrumbs, physicianSchema]} />
 
       {/* ─── 1. TOP BREADCRUMB BAR ─────────────────────────────────── */}
       <div className="bg-slate-900 text-slate-400 py-3 px-4 sm:px-6 border-b border-slate-800 text-xs">

@@ -58,7 +58,6 @@ export default async function HospitalPage({ params }: { params: Params }) {
     buildBreadcrumbSchema([
       { name: 'Home', url: SITE_URL },
       { name: 'Hospitals', url: `${SITE_URL}/hospitals` },
-      { name: hospital.cityLabel, url: `${SITE_URL}/cities/${city}` },
       { name: hospital.name, url: pageUrl },
     ]),
   ]
@@ -74,7 +73,7 @@ export default async function HospitalPage({ params }: { params: Params }) {
           <li><ChevronRight className="h-3 w-3" /></li>
           <li><Link href="/hospitals" className="hover:text-brand-600">Hospitals</Link></li>
           <li><ChevronRight className="h-3 w-3" /></li>
-          <li><Link href={`/cities/${city}`} className="hover:text-brand-600">{hospital.cityLabel}</Link></li>
+          <li className="text-slate-500">{hospital.cityLabel}</li>
           <li><ChevronRight className="h-3 w-3" /></li>
           <li className="text-foreground font-medium">{hospital.name}</li>
         </ol>

@@ -4,9 +4,18 @@ import { ExternalLink, ArrowRight } from 'lucide-react'
 import { Badge, Card, CardContent, Button } from '@/components/ui/primitives'
 
 export const metadata: Metadata = {
-  title: 'Visa & Travel to India for Medical Treatment | healthremade',
+  title: 'India Medical Visa (MED) Guide & Travel Process | healthremade',
   description:
-    'Medical visa process for India: step-by-step by country, embassy contacts, documents required, and tips for medical tourism travel.',
+    'Complete medical visa process for India: step-by-step by country, official embassy contacts, documents required, and hospital invitation letters.',
+  alternates: {
+    canonical: '/visa-and-travel',
+  },
+  openGraph: {
+    title: 'India Medical Visa (MED) Guide & Travel Process | healthremade',
+    description:
+      'Official medical visa requirements, invitation letters, embassy guidelines, and travel checklist for medical treatment in India.',
+    url: '/visa-and-travel',
+  },
 }
 
 const VISA_DATA = [

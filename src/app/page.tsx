@@ -18,7 +18,7 @@ import { PROCEDURES } from '@/data/procedures'
 import { Badge, Button, Card, CardContent, JsonLd } from '@/components/ui/primitives'
 import { AccreditationBadge } from '@/components/ui/medical'
 import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
-import { buildOrganizationSchema } from '@/lib/schema'
+import { buildWebSiteSchema, buildFAQSchema } from '@/lib/schema'
 import { formatINR } from '@/lib/utils'
 
 // Interactive Components
@@ -34,14 +34,48 @@ export const metadata: Metadata = {
   title: 'Get your health remade in india | Top Hospitals & Transparent Pricing',
   description:
     'Compare itemized medical treatment packages across JCI & NABH accredited hospitals in Delhi NCR and India. Free quotes, verified outcomes, and zero markup.',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
+    type: 'website',
+    url: '/',
     title: 'healthremade — Get your health remade in india',
     description:
       'Compare itemized treatment package costs from accredited hospitals in India. Transparent quotes, top doctors, and end-to-end patient care.',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'healthremade — Get your health remade in india',
+    description:
+      'Compare itemized treatment package costs from accredited hospitals in India. Free quotes, verified outcomes, and zero markup.',
+  },
 }
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
+
+const HOME_FAQS = [
+  {
+    question: 'How much can I save on medical treatments in India?',
+    answer:
+      'Patients typically save 70% to 85% compared to private healthcare costs in the US, UK, Canada, and Australia, even after factoring in international travel and accommodation, while receiving care at internationally accredited JCI and NABH facilities.',
+  },
+  {
+    question: 'How do I get a free medical opinion and treatment quote?',
+    answer:
+      'Simply submit your existing medical reports through our online quote form or connect directly with our patient desk on WhatsApp. We share your clinical history with senior specialists across top hospitals and deliver itemized cost estimates in 24–48 hours.',
+  },
+  {
+    question: 'Are Indian doctors and hospitals internationally accredited?',
+    answer:
+      'Yes. Our partner hospitals hold rigorous international accreditations like JCI (Joint Commission International) and NABH (National Accreditation Board for Hospitals). Many department chairmen and senior surgeons hold fellowships from the UK (FRCS), US (FACS), and Europe.',
+  },
+  {
+    question: 'How does medical visa assistance work?',
+    answer:
+      'After you confirm your preferred hospital and consultant, our care coordinator arranges an official Medical Visa Invitation Letter (MED visa) from the hospital for you and your travel attendant within 24 hours.',
+  },
+]
 
 const HOW_WE_ASSIST = [
   {
@@ -76,7 +110,7 @@ const TRUST_METRICS = [
 export default function HomePage() {
   return (
     <>
-      <JsonLd data={buildOrganizationSchema(SITE_URL)} />
+      <JsonLd data={[buildWebSiteSchema(SITE_URL), buildFAQSchema({ questions: HOME_FAQS })]} />
 
       {/* ─── 1. HERO SECTION WITH SCROLL-LINKED FLIGHT ANIMATION ──── */}
       <HeroSection>

@@ -11,10 +11,14 @@ export const metadata: Metadata = {
   title: 'Patient Video Testimonials & Verified Clinical Outcomes | healthremade',
   description:
     'Watch real video stories from international patients who received cardiac surgery, robotic knee replacement, organ transplants, and dental rehabilitation in India with 70–85% savings.',
+  alternates: {
+    canonical: '/testimonials',
+  },
   openGraph: {
     title: 'Patient Video Testimonials & Verified Clinical Outcomes | healthremade',
     description:
       'Real video stories and full case backgrounds from international patients treated at top JCI/NABH accredited hospitals in India.',
+    url: '/testimonials',
   },
 }
 

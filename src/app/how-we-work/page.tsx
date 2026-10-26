@@ -6,9 +6,18 @@ import { JsonLd } from '@/components/ui/primitives'
 import { buildBreadcrumbSchema } from '@/lib/schema'
 
 export const metadata: Metadata = {
-  title: 'How We Work — Patient Journey | healthremade',
+  title: 'How We Work — Transparent Patient Journey in India | healthremade',
   description:
     'How healthremade works: from browsing real prices to coordinated travel, treatment, and post-op follow-up from home. No pop-ups, no hidden steps.',
+  alternates: {
+    canonical: '/how-we-work',
+  },
+  openGraph: {
+    title: 'How We Work — Transparent Patient Journey in India | healthremade',
+    description:
+      'Step-by-step guide to receiving medical treatment in India with transparent pricing, visa coordination, and accredited doctors.',
+    url: '/how-we-work',
+  },
 }
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'

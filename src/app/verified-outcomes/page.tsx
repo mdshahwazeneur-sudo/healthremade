@@ -12,10 +12,14 @@ export const metadata: Metadata = {
   title: 'Verified Patient Outcomes & Hospital Success Metrics | healthremade',
   description:
     'How healthremade evaluates hospital success rates, survey-backed NPS metrics, and patient-reported clinical outcomes across top Indian medical centres.',
+  alternates: {
+    canonical: '/verified-outcomes',
+  },
   openGraph: {
     title: 'Verified Patient Outcomes & Hospital Success Metrics | healthremade',
     description:
       'Transparent, survey-backed patient satisfaction and outcome data for accredited hospitals in Delhi NCR and India.',
+    url: '/verified-outcomes',
   },
 }
 

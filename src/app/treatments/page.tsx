@@ -2,20 +2,38 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { PROCEDURES, getProceduresBySpecialty } from '@/data/procedures'
-import { Badge, Card, CardContent } from '@/components/ui/primitives'
+import { Badge, Card, CardContent, JsonLd } from '@/components/ui/primitives'
 import { formatINR } from '@/lib/utils'
+import { buildBreadcrumbSchema } from '@/lib/schema'
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
 export const metadata: Metadata = {
   title: 'Medical Treatments in India — All Procedures & Prices | healthremade',
   description:
     'Browse all medical procedures available in India with transparent price ranges, recovery timelines, and top hospital matches. No form-fill required.',
+  alternates: {
+    canonical: '/treatments',
+  },
+  openGraph: {
+    title: 'Medical Treatments in India — All Procedures & Prices | healthremade',
+    description:
+      'Compare procedures and transparent package costs across accredited hospitals in India.',
+    url: '/treatments',
+  },
 }
 
 export default function TreatmentsIndexPage() {
   const bySpecialty = getProceduresBySpecialty()
+  const breadcrumbJson = buildBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Treatments', url: `${SITE_URL}/treatments` },
+  ])
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+    <>
+      <JsonLd data={breadcrumbJson} />
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-extrabold text-foreground sm:text-4xl mb-3">All treatments</h1>
       <p className="text-muted-foreground mb-10">
         Browse all {PROCEDURES.length} flagship procedures with indicative price ranges — no account required.
@@ -50,5 +68,6 @@ export default function TreatmentsIndexPage() {
         </div>
       ))}
     </div>
+    </>
   )
 }

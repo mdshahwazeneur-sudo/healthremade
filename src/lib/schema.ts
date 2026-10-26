@@ -153,3 +153,19 @@ export function buildOrganizationSchema(siteUrl: string) {
     serviceType: "Medical Tourism Facilitation",
   };
 }
+
+export function buildWebSiteSchema(siteUrl: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "healthremade",
+    url: siteUrl,
+    description:
+      "Compare transparent medical treatment packages across JCI & NABH accredited hospitals in India.",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${siteUrl}/pricing?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+}

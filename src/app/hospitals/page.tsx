@@ -2,13 +2,25 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { MapPin } from 'lucide-react'
 import { HOSPITALS, type City } from '@/data/hospitals'
-import { Card, CardContent } from '@/components/ui/primitives'
+import { Card, CardContent, JsonLd } from '@/components/ui/primitives'
 import { AccreditationBadge } from '@/components/ui/medical'
+import { buildBreadcrumbSchema } from '@/lib/schema'
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
 export const metadata: Metadata = {
   title: 'Accredited Hospitals in India — Partner Listings | healthremade',
   description:
     'Browse our partner hospitals across Delhi NCR, Mumbai, Chennai, Bangalore, and Hyderabad. Accreditation verified via official NABH/JCI registries.',
+  alternates: {
+    canonical: '/hospitals',
+  },
+  openGraph: {
+    title: 'Accredited Hospitals in India — Partner Listings | healthremade',
+    description:
+      'Compare top NABH and JCI accredited hospitals in India with verified clinical outcomes and zero markups.',
+    url: '/hospitals',
+  },
 }
 
 const CITY_LABELS: Record<City, string> = {
@@ -26,8 +38,15 @@ for (const h of HOSPITALS) {
 }
 
 export default function HospitalsIndexPage() {
+  const breadcrumbJson = buildBreadcrumbSchema([
+    { name: 'Home', url: SITE_URL },
+    { name: 'Hospitals', url: `${SITE_URL}/hospitals` },
+  ])
+
   return (
-    <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+    <>
+      <JsonLd data={breadcrumbJson} />
+      <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6">
       <h1 className="text-3xl font-extrabold text-foreground sm:text-4xl mb-3">Partner hospitals</h1>
       <p className="text-muted-foreground mb-10 max-w-2xl">
         {HOSPITALS.length} accredited hospitals across India. NABH/JCI accreditation numbers link directly to official public registries.
@@ -76,5 +95,6 @@ export default function HospitalsIndexPage() {
         </div>
       ))}
     </div>
+    </>
   )
 }
