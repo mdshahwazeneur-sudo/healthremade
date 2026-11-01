@@ -28,10 +28,10 @@ export async function sendTelegramLeadAlert(
   payload: LeadTelegramPayload
 ): Promise<{ success: boolean; error?: string }> {
   const token = process.env.TELEGRAM_BOT_TOKEN
-  const chatId = process.env.TELEGRAM_CHAT_ID
+  const chatId = process.env.TELEGRAM_CHAT_ID || '1228191175'
 
-  if (!token || !chatId) {
-    console.warn('[Telegram Alert] TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is missing.');
+  if (!token) {
+    console.warn('[Telegram Alert] TELEGRAM_BOT_TOKEN is missing.');
     return { success: false, error: 'Telegram credentials missing' }
   }
 
