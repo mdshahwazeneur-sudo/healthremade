@@ -5,6 +5,7 @@ import { PROCEDURES, getProceduresBySpecialty } from '@/data/procedures'
 import { Badge, Card, CardContent, JsonLd } from '@/components/ui/primitives'
 import { formatINR } from '@/lib/utils'
 import { buildBreadcrumbSchema } from '@/lib/schema'
+import { PriceText } from '@/context/CurrencyContext'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
@@ -56,7 +57,7 @@ export default function TreatmentsIndexPage() {
                     <div className="mt-4 pt-3 border-t border-border flex items-center justify-between">
                       <div>
                         <p className="text-xs text-muted-foreground">From</p>
-                        <p className="font-bold text-foreground">{formatINR(proc.priceInrMin)}</p>
+                        <PriceText amountInr={proc.priceInrMin} className="font-bold text-foreground" />
                       </div>
                       <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-brand-600" />
                     </div>

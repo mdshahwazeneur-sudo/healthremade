@@ -1,5 +1,8 @@
+'use client'
+
 import Link from 'next/link'
 import { Separator } from '@/components/ui/primitives'
+import { useLanguage } from '@/context/LanguageContext'
 
 const TREATMENT_LINKS = [
   { label: 'Bypass Surgery (CABG)', href: '/treatments/cardiac/bypass-surgery' },
@@ -32,8 +35,8 @@ const PATIENT_LINKS = [
   { label: 'Dental Tourism Guide', href: '/blog/full-mouth-dental-implants-cost-india-all-on-4-guide' },
   { label: 'CABG Bypass Cost Guide', href: '/blog/heart-bypass-surgery-cost-india-delhi-guide' },
   { label: 'Robotic Knee Cost Guide', href: '/blog/robotic-knee-replacement-cost-india-recovery-guide' },
-  { label: 'Patient Dashboard', href: '/login' },
-  { label: 'Create Account', href: '/register' },
+  { label: 'Patient & Doctor Forum', href: '/forum' },
+  { label: 'Patient Video Testimonials', href: '/testimonials' },
 ]
 
 const LEGAL_LINKS = [
@@ -42,6 +45,7 @@ const LEGAL_LINKS = [
 ]
 
 export function Footer() {
+  const { t } = useLanguage()
   return (
     <footer className="border-t border-border bg-slate-50">
       {/* Trust bar */}
@@ -111,7 +115,7 @@ export function Footer() {
 
           {/* Cities */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-foreground">Medical Hubs</h3>
+            <h3 className="mb-3 text-sm font-semibold text-foreground">{t.footer.medicalHubs}</h3>
             <ul className="space-y-2">
               {CITY_LINKS.map((link) => (
                 <li key={link.href}>
@@ -125,7 +129,7 @@ export function Footer() {
 
           {/* Trust */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-foreground">Patient Trust</h3>
+            <h3 className="mb-3 text-sm font-semibold text-foreground">{t.footer.patientTrust}</h3>
             <ul className="space-y-2">
               {TRUST_LINKS.map((link) => (
                 <li key={link.href}>
@@ -139,7 +143,7 @@ export function Footer() {
 
           {/* Patients */}
           <div>
-            <h3 className="mb-3 text-sm font-semibold text-foreground">Travel & Support</h3>
+            <h3 className="mb-3 text-sm font-semibold text-foreground">{t.footer.travelSupport}</h3>
             <ul className="space-y-2">
               {PATIENT_LINKS.map((link) => (
                 <li key={link.href}>
@@ -160,10 +164,10 @@ export function Footer() {
             </div>
             <div>
               <h4 className="text-sm font-bold text-slate-900">
-                Detailed Medical Cost Guides & Procedure Walkthroughs
+                {t.footer.costGuidesBannerTitle}
               </h4>
               <p className="text-xs text-muted-foreground mt-0.5">
-                Compare USA/UK vs India pricing for Dental Implants, Bypass Surgery, Knee Replacements, Liver Transplants, and IVF.
+                {t.footer.costGuidesBannerSub}
               </p>
             </div>
           </div>
@@ -171,16 +175,26 @@ export function Footer() {
             href="/blog"
             className="inline-flex items-center gap-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white px-4 py-2.5 text-xs font-bold transition-colors shadow-2xs shrink-0"
           >
-            <span>Explore All Cost Guides</span>
-            <span>→</span>
+            <span>{t.footer.exploreCostGuides}</span>
           </Link>
         </div>
 
-        <Separator className="my-8" />
+        {/* Medical Facilitator Legal Disclaimer */}
+        <div className="mt-8 rounded-xl bg-slate-100/90 border border-slate-200 p-4 text-xs text-slate-600 leading-relaxed">
+          <p className="font-semibold text-slate-800 mb-1 flex items-center gap-1.5">
+            <span>⚖️</span>
+            <span>{t.footer.disclaimerTitle}</span>
+          </p>
+          <p>
+            {t.footer.disclaimerText}
+          </p>
+        </div>
+
+        <Separator className="my-6" />
 
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} healthremade. Medical information on this site is for informational guidance only and does not constitute medical advice.
+            © {new Date().getFullYear()} {t.footer.allRightsReserved}
           </p>
           <div className="flex flex-wrap gap-4">
             {LEGAL_LINKS.map((link) => (
@@ -193,7 +207,7 @@ export function Footer() {
 
         {/* Accreditation logos / links */}
         <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-          <span>Hospital accreditation verified via:</span>
+          <span>{t.footer.accreditationVerified}</span>
           <a href="https://www.nabh.co" target="_blank" rel="noopener noreferrer" className="font-medium text-brand-600 hover:text-brand-700">
             NABH (National Accreditation Board for Hospitals) ↗
           </a>

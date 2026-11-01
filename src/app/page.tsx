@@ -12,6 +12,8 @@ import {
   Building2,
   FileCheck,
   Languages,
+  Sparkles,
+  MessageSquare,
 } from 'lucide-react'
 import { HOSPITALS } from '@/data/hospitals'
 import { PROCEDURES } from '@/data/procedures'
@@ -20,10 +22,14 @@ import { AccreditationBadge } from '@/components/ui/medical'
 import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
 import { buildWebSiteSchema, buildFAQSchema } from '@/lib/schema'
 import { formatINR } from '@/lib/utils'
+import { PriceText } from '@/context/CurrencyContext'
 
 // Interactive Components
 import { SearchTriggerButton } from '@/components/search/GlobalSearchBar'
 import { HeroSection } from '@/components/home/HeroSection'
+import { HomeHeroContent } from '@/components/home/HomeHeroContent'
+import { HomeAssistanceSection } from '@/components/home/HomeAssistanceSection'
+import { HomeStatsSection } from '@/components/home/HomeStatsSection'
 import { InlineQuoteSection } from '@/components/home/InlineQuoteSection'
 import { ProcedureCardActions, CustomPackageCardAction, HospitalCardActions } from '@/components/home/CardActions'
 import { HomeTopDoctors } from '@/components/home/HomeTopDoctors'
@@ -114,95 +120,14 @@ export default function HomePage() {
 
       {/* ─── 1. HERO SECTION WITH SCROLL-LINKED FLIGHT ANIMATION ──── */}
       <HeroSection>
-        <div className="inline-flex items-center gap-2 rounded-full bg-emerald-100/80 border border-emerald-300 px-3.5 py-1 text-xs font-bold text-emerald-800 mb-6 shadow-2xs">
-          <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>24/7 International Patient Desk Online</span>
-        </div>
-
-        <h1 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-slate-900 leading-[1.18] sm:leading-[1.15] max-w-4xl mx-auto px-2">
-          Get your health <span className="text-brand-600">remade</span> in india
-        </h1>
-
-        <p className="mt-3 sm:mt-4 text-base sm:text-xl md:text-2xl font-bold text-brand-700 tracking-tight">
-          Get Free Quotes & Transparent Pricing
-        </p>
-
-        <p className="mx-auto mt-2.5 max-w-2xl text-xs sm:text-base text-slate-600 leading-relaxed px-2">
-          Compare itemized treatment packages from top JCI & NABH accredited hospitals in Delhi NCR and across India. Free senior doctor opinions, fast medical visas, and continuous care support.
-        </p>
-
-        {/* Instant Global Keyword Search Bar */}
-        <SearchTriggerButton
-          variant="hero"
-          className="mt-6 mb-8"
-          placeholder="Search treatments (e.g. Bypass, Knee, Liver), doctors (e.g. Trehan, Seth), or hospitals..."
-        />
-
-        {/* ─── SHIFTED: Quotation Form Section (Get 3 Hospital Opinions & Cost Estimates - 100% Free) ─── */}
-        <div className="w-full max-w-6xl mx-auto mt-4 mb-4">
-          <InlineQuoteSection isHeroCard={true} />
-        </div>
-
-        {/* Key Trust Signals */}
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4 sm:gap-8 text-xs font-semibold text-slate-600">
-          <span className="flex items-center gap-1.5">
-            <Shield className="h-4 w-4 text-emerald-600" /> JCI & NABH Accredited Hospitals
-          </span>
-          <span className="flex items-center gap-1.5">
-            <TrendingDown className="h-4 w-4 text-brand-600" /> Zero Hidden Markups
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Star className="h-4 w-4 text-amber-500" /> 100% Free Care Coordination
-          </span>
-        </div>
+        <HomeHeroContent />
       </HeroSection>
 
       {/* ─── 2. HOW WE HELP (4-PILLAR CARE) ────────────────────────── */}
-      <section className="py-16 px-4 sm:px-6 bg-white">
-        <div className="mx-auto max-w-7xl">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <Badge variant="default" className="mb-2">Comprehensive Patient Support</Badge>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900">
-              How healthremade Assists International Patients
-            </h2>
-            <p className="mt-2 text-sm sm:text-base text-slate-600">
-              From your initial inquiry to full recovery back home, our care team handles every detail with complete transparency.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {HOW_WE_ASSIST.map((item, idx) => (
-              <div
-                key={idx}
-                className="group rounded-2xl border border-slate-200/80 bg-slate-50/50 p-6 transition-all hover:bg-white hover:shadow-lg hover:border-brand-300"
-              >
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 group-hover:bg-brand-600 group-hover:text-white transition-colors">
-                  {item.icon}
-                </div>
-                <h3 className="text-base font-bold text-slate-900 mb-2">{item.title}</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HomeAssistanceSection />
 
       {/* ─── 3. STATS BAR ─────────────────────────────────────────── */}
-      <section className="border-y border-slate-200 bg-slate-900 text-white py-10 px-4 sm:px-6">
-        <div className="mx-auto max-w-6xl">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-            {TRUST_METRICS.map((m) => (
-              <div key={m.label} className="space-y-1">
-                <div className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-brand-400">
-                  {m.value}
-                </div>
-                <div className="text-xs sm:text-sm font-semibold text-slate-200">{m.label}</div>
-                <div className="text-[11px] text-slate-400">{m.sub}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HomeStatsSection />
 
       {/* ─── 4. TREATMENTS: FLAGSHIP MEDICAL PROCEDURES ────────────── */}
       <section className="bg-slate-50 py-16 px-4 sm:px-6">
@@ -251,7 +176,7 @@ export default function HomePage() {
                     <div className="mt-4 pt-3 border-t border-slate-100 flex items-baseline justify-between">
                       <div>
                         <span className="text-[11px] text-slate-500 uppercase tracking-wider block">Package From</span>
-                        <span className="text-lg font-extrabold text-slate-900">{formatINR(proc.priceInrMin)}</span>
+                        <PriceText amountInr={proc.priceInrMin} className="text-lg font-extrabold text-slate-900" />
                       </div>
                       <Link
                         href={`/treatments/${proc.specialty}/${proc.slug}`}
@@ -642,6 +567,77 @@ export default function HomePage() {
                 <p className="text-xs text-slate-600 leading-relaxed">{s.desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 10.5 PATIENTS & DOCTORS DISCUSSION FORUM SECTION ───────── */}
+      <section className="bg-gradient-to-br from-slate-900 via-brand-950 to-slate-900 text-white py-16 px-4 sm:px-6 relative overflow-hidden">
+        <div className="mx-auto max-w-6xl relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="lg:col-span-7 space-y-4">
+              <div className="inline-flex items-center gap-2 rounded-full bg-teal-500/20 border border-teal-400/30 px-3.5 py-1 text-xs font-bold text-teal-300">
+                <MessageSquare className="h-3.5 w-3.5 text-teal-400" />
+                <span>Anonymous Account System • Verified Experts</span>
+              </div>
+
+              <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white leading-tight">
+                Join our patients &amp; doctors discussion forum
+              </h2>
+
+              <p className="text-slate-300 text-xs sm:text-base leading-relaxed">
+                A calm, privacy-protected community where anyone can join any chat anonymously. Discuss real recovery timelines, hospital bills, and medical visas with answers provided by <strong>healthremade verified experts</strong> and patient peers.
+              </p>
+
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/forum"
+                  className="inline-flex items-center gap-2 rounded-xl bg-teal-600 hover:bg-teal-500 text-white font-bold text-sm px-6 py-3.5 shadow-lg hover:shadow-xl transition-all"
+                >
+                  <span>Enter Discussion Forum</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+
+                <span className="text-xs text-slate-400 font-medium">
+                  Anonymous participation • Neutral expert guidance
+                </span>
+              </div>
+            </div>
+
+            {/* Preview Forum Card */}
+            <div className="lg:col-span-5">
+              <div className="rounded-2xl border border-slate-700/80 bg-slate-800/80 p-5 shadow-2xl backdrop-blur-md space-y-3.5">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-700">
+                  <span className="text-xs font-bold text-teal-400 uppercase tracking-wider">
+                    Recent Verified Thread
+                  </span>
+                  <span className="text-[10px] text-slate-400">2 days ago</span>
+                </div>
+
+                <h4 className="text-sm font-bold text-white line-clamp-2">
+                  &ldquo;Off-Pump vs On-Pump CABG: What is the real recovery difference in Delhi hospitals?&rdquo;
+                </h4>
+
+                <div className="rounded-xl bg-slate-900/80 border border-emerald-500/40 p-3 space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold text-emerald-400">healthremade Verified Expert</span>
+                    <span className="text-[10px] font-semibold text-emerald-300 bg-emerald-950/80 px-1.5 py-0.5 rounded border border-emerald-700/50">
+                      Senior Clinical Desk
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 line-clamp-3">
+                    Off-pump surgery avoids heart-lung bypass circuits, shortening ICU stays to 48 hours. Patients are typically cleared for air travel around Day 14–16 post-op...
+                  </p>
+                </div>
+
+                <Link
+                  href="/forum"
+                  className="block text-center text-xs font-bold text-teal-400 hover:text-teal-300 pt-1"
+                >
+                  Read Discussions on the Forum →
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>

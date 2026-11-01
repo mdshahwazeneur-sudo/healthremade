@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import { Globe, ChevronDown, Check } from 'lucide-react'
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 
@@ -14,75 +15,57 @@ export interface Language {
 
 export const SUPPORTED_LANGUAGES: Language[] = [
   { code: 'en', name: 'English', nativeName: 'English', flag: '🇬🇧', direction: 'ltr' },
+  { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', flag: '🇧🇩', direction: 'ltr' },
   { code: 'ar', name: 'Arabic', nativeName: 'العربية', flag: '🇸🇦', direction: 'rtl' },
   { code: 'ru', name: 'Russian', nativeName: 'Русский', flag: '🇷🇺', direction: 'ltr' },
   { code: 'fr', name: 'French', nativeName: 'Français', flag: '🇫🇷', direction: 'ltr' },
-  { code: 'bn', name: 'Bengali', nativeName: 'বাংলা', flag: '🇧🇩', direction: 'ltr' },
+  { code: 'sw', name: 'Swahili', nativeName: 'Kiswahili', flag: '🇰🇪', direction: 'ltr' },
+  { code: 'uz', name: 'Uzbek', nativeName: 'Oʻzbekcha', flag: '🇺🇿', direction: 'ltr' },
   { code: 'ro', name: 'Romanian', nativeName: 'Română', flag: '🇷🇴', direction: 'ltr' },
   { code: 'pt', name: 'Portuguese', nativeName: 'Português', flag: '🇵🇹', direction: 'ltr' },
   { code: 'es', name: 'Spanish', nativeName: 'Español', flag: '🇪🇸', direction: 'ltr' },
-  { code: 'sw', name: 'Swahili', nativeName: 'Kiswahili', flag: '🇰🇪', direction: 'ltr' },
-  { code: 'uz', name: 'Uzbek', nativeName: 'Oʻzbekcha', flag: '🇺🇿', direction: 'ltr' },
   { code: 'de', name: 'German', nativeName: 'Deutsch', flag: '🇩🇪', direction: 'ltr' },
   { code: 'tr', name: 'Turkish', nativeName: 'Türkçe', flag: '🇹🇷', direction: 'ltr' },
 ]
 
+import { useLanguage } from '@/context/LanguageContext'
+
 export function useActiveLanguage() {
-  const [currentLang, setCurrentLang] = useState<string>('en')
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('healthremade_lang')
-      if (saved) setCurrentLang(saved)
-    } catch (e) {
-      // ignore SSR
-    }
-
-    const handler = (e: Event) => {
-      const customEvent = e as CustomEvent<string>
-      if (customEvent.detail) {
-        setCurrentLang(customEvent.detail)
-      }
-    }
-
-    window.addEventListener('healthremade_lang_changed', handler)
-    return () => window.removeEventListener('healthremade_lang_changed', handler)
-  }, [])
-
-  return currentLang
+  const { locale } = useLanguage()
+  return locale
 }
 
 export function LanguageSelector({ className = '', compact = false }: { className?: string; compact?: boolean }) {
-  const [selectedLang, setSelectedLang] = useState<Language>(SUPPORTED_LANGUAGES[0])
-
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('healthremade_lang')
-      if (saved) {
-        const found = SUPPORTED_LANGUAGES.find((l) => l.code === saved)
-        if (found) {
-          setSelectedLang(found)
-          window.dispatchEvent(new CustomEvent('healthremade_lang_changed', { detail: found.code }))
-        }
-      }
-    } catch (e) {
-      // ignore SSR
-    }
-  }, [])
+  const router = useRouter()
+  const pathname = usePathname()
+  const { locale, setLocale } = useLanguage()
+  const selectedLang = SUPPORTED_LANGUAGES.find((l) => l.code === locale) || SUPPORTED_LANGUAGES[0]
 
   const handleSelect = (lang: Language) => {
-    setSelectedLang(lang)
-    try {
-      localStorage.setItem('healthremade_lang', lang.code)
-      if (lang.direction === 'rtl') {
-        document.documentElement.dir = 'rtl'
-      } else {
-        document.documentElement.dir = 'ltr'
-      }
-      window.dispatchEvent(new CustomEvent('healthremade_lang_changed', { detail: lang.code }))
-    } catch (e) {
-      // ignore
+    setLocale(lang.code)
+
+    if (typeof window === 'undefined') return
+
+    // Strip any existing locale prefix from pathname
+    const locales = SUPPORTED_LANGUAGES.map((l) => l.code).filter((c) => c !== 'en')
+    const regex = new RegExp(`^/(${locales.join('|')})(/.*)?$`)
+    const match = pathname.match(regex)
+    const cleanPath = match ? match[2] || '/' : pathname
+
+    let targetUrl = cleanPath
+    if (lang.code !== 'en') {
+      targetUrl = `/${lang.code}${cleanPath === '/' ? '' : cleanPath}`
     }
+
+    // Preserve search params if any (excluding lang)
+    const currentParams = new URLSearchParams(window.location.search)
+    currentParams.delete('lang')
+    const qs = currentParams.toString()
+    if (qs) {
+      targetUrl += `?${qs}`
+    }
+
+    router.push(targetUrl)
   }
 
   return (
@@ -110,14 +93,14 @@ export function LanguageSelector({ className = '', compact = false }: { classNam
         <DropdownMenu.Content
           align="end"
           sideOffset={6}
-          className="z-50 min-w-[200px] rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xl text-slate-800 animate-in fade-in zoom-in-95"
+          className="z-50 min-w-[210px] rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xl text-slate-800 animate-in fade-in zoom-in-95"
         >
           <div className="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 mb-1 flex items-center justify-between">
             <span>Select Language</span>
             <span className="text-[10px] text-brand-600 font-bold">12 Languages</span>
           </div>
 
-          <div className="max-h-[300px] overflow-y-auto space-y-0.5">
+          <div className="max-h-[320px] overflow-y-auto space-y-0.5">
             {SUPPORTED_LANGUAGES.map((lang) => {
               const isSelected = selectedLang.code === lang.code
               return (

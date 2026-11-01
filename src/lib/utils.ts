@@ -8,36 +8,9 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/**
- * Format a price in INR with comma separation.
- */
-export function formatINR(amount: number): string {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
+export type Currency = "USD" | "EUR" | "AED" | "GBP" | "INR";
 
-/**
- * Format a price range string, e.g. "₹3,50,000 – ₹5,00,000"
- */
-export function formatPriceRange(min: number, max: number, currency: Currency = "INR"): string {
-  if (currency === "INR") {
-    return `${formatINR(min)} – ${formatINR(max)}`;
-  }
-  const rate = EXCHANGE_RATES[currency];
-  const fmt = new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency,
-    maximumFractionDigits: 0,
-  });
-  return `${fmt.format(Math.round(min * rate))} – ${fmt.format(Math.round(max * rate))}`;
-}
-
-export type Currency = "INR" | "USD" | "AED" | "GBP" | "EUR";
-
-/** Approximate exchange rates vs INR — update periodically or pull from API */
+/** Approximate exchange rates vs INR */
 export const EXCHANGE_RATES: Record<Exclude<Currency, "INR">, number> = {
   USD: 0.012,
   AED: 0.044,
@@ -46,12 +19,78 @@ export const EXCHANGE_RATES: Record<Exclude<Currency, "INR">, number> = {
 };
 
 export const CURRENCY_LABELS: Record<Currency, string> = {
-  INR: "₹ INR",
   USD: "$ USD",
+  EUR: "€ EUR",
   AED: "AED",
   GBP: "£ GBP",
-  EUR: "€ EUR",
+  INR: "₹ INR",
 };
+
+/**
+ * Determine default currency for a language code.
+ * Defaults to USD for English and most international travelers.
+ */
+export function getCurrencyForLanguage(langCode: string): Currency {
+  switch (langCode.toLowerCase()) {
+    case "ar":
+      return "AED";
+    case "fr":
+    case "de":
+    case "ro":
+    case "pt":
+      return "EUR";
+    case "in":
+      return "INR";
+    case "en":
+    default:
+      return "USD";
+  }
+}
+
+/**
+ * Format a single price in the requested currency (default: USD).
+ */
+export function formatPrice(amountInr: number, currency: Currency = "USD"): string {
+  if (currency === "INR") {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(amountInr);
+  }
+
+  const rate = EXCHANGE_RATES[currency] ?? EXCHANGE_RATES.USD;
+  const converted = Math.round(amountInr * rate);
+
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  }).format(converted);
+}
+
+/**
+ * Format a price in INR with comma separation (kept for backward compatibility).
+ */
+export function formatINR(amount: number): string {
+  return formatPrice(amount, "INR");
+}
+
+/**
+ * Format a price range string, e.g. "$3,840 – $5,760" (default: USD)
+ */
+export function formatPriceRange(min: number, max: number, currency: Currency = "USD"): string {
+  if (currency === "INR") {
+    return `${formatPrice(min, "INR")} – ${formatPrice(max, "INR")}`;
+  }
+  const rate = EXCHANGE_RATES[currency] ?? EXCHANGE_RATES.USD;
+  const fmt = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    maximumFractionDigits: 0,
+  });
+  return `${fmt.format(Math.round(min * rate))} – ${fmt.format(Math.round(max * rate))}`;
+}
 
 /**
  * Slugify a string for URL usage.

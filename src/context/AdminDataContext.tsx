@@ -129,19 +129,24 @@ export function AdminDataProvider({ children }: { children: React.ReactNode }) {
   // Load from localStorage on client mount
   useEffect(() => {
     try {
-      const storedDocs = localStorage.getItem('healthremade_doctors_v5')
+      const storedDocs = localStorage.getItem('healthremade_doctors_v6')
       if (storedDocs) {
         setDoctors(JSON.parse(storedDocs))
       } else {
         setDoctors(INITIAL_DOCTORS)
-        localStorage.setItem('healthremade_doctors_v5', JSON.stringify(INITIAL_DOCTORS))
+        localStorage.setItem('healthremade_doctors_v6', JSON.stringify(INITIAL_DOCTORS))
       }
 
       const storedBlogs = localStorage.getItem('healthremade_blogs')
       if (storedBlogs) setBlogPosts(JSON.parse(storedBlogs))
 
-      const storedHosps = localStorage.getItem('healthremade_hospitals')
-      if (storedHosps) setHospitals(JSON.parse(storedHosps))
+      const storedHosps = localStorage.getItem('healthremade_hospitals_v6')
+      if (storedHosps) {
+        setHospitals(JSON.parse(storedHosps))
+      } else {
+        setHospitals(INITIAL_HOSPITALS)
+        localStorage.setItem('healthremade_hospitals_v6', JSON.stringify(INITIAL_HOSPITALS))
+      }
 
       const storedLeads = localStorage.getItem('healthremade_leads')
       if (storedLeads) setLeads(JSON.parse(storedLeads))

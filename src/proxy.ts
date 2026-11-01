@@ -1,14 +1,16 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+// Supported non-default locales
+const LOCALES = ['bn', 'ar', 'ru', 'fr', 'sw', 'uz', 'ro', 'pt', 'es', 'de', 'tr']
+const LOCALE_REGEX = new RegExp(`^/(${LOCALES.join('|')})(/.*)?$`)
+
 // High-Concurrency In-Memory Sliding-Window Rate Limiter
-// Prevents DDoS, brute force scrapers, and bot storms while permitting genuine patient traffic
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
-
 const WINDOW_MS = 60 * 1000 // 1 minute window
-const MAX_REQUESTS_PER_MINUTE = 240 // Up to 240 requests/min per IP (ample for rapid user browsing)
+const MAX_REQUESTS_PER_MINUTE = 240
 
-// Clean up stale rate limit entries every 5 minutes to prevent memory leaks
+// Clean up stale rate limit entries every 5 minutes
 if (typeof setInterval !== 'undefined') {
   setInterval(() => {
     const now = Date.now()
@@ -21,6 +23,9 @@ if (typeof setInterval !== 'undefined') {
 }
 
 export function proxy(request: NextRequest) {
+  const { pathname, searchParams } = request.nextUrl
+
+  // 1. Rate Limiting Check
   const ip =
     request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
     request.headers.get('x-real-ip') ||
@@ -44,12 +49,53 @@ export function proxy(request: NextRequest) {
     }
   }
 
-  const response = NextResponse.next()
+  // 2. Multilingual International SEO Sub-path Rewrite
+  const match = pathname.match(LOCALE_REGEX)
 
-  // Add edge security headers
+  if (match) {
+    const locale = match[1]
+    const restPath = match[2] || '/'
+
+    const url = request.nextUrl.clone()
+    url.pathname = restPath
+    url.searchParams.set('lang', locale)
+
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('x-locale', locale)
+    requestHeaders.set('x-original-pathname', pathname)
+
+    const response = NextResponse.rewrite(url, {
+      request: {
+        headers: requestHeaders,
+      },
+    })
+
+    // Edge security headers & cookie
+    response.headers.set('X-XSS-Protection', '1; mode=block')
+    response.headers.set('X-Content-Type-Options', 'nosniff')
+    response.cookies.set('healthremade_lang', locale, { path: '/', maxAge: 31536000 })
+    return response
+  }
+
+  // If URL has ?lang= parameter directly
+  const langParam = searchParams.get('lang')
+  if (langParam && LOCALES.includes(langParam.toLowerCase())) {
+    const requestHeaders = new Headers(request.headers)
+    requestHeaders.set('x-locale', langParam.toLowerCase())
+    const response = NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    })
+    response.headers.set('X-XSS-Protection', '1; mode=block')
+    response.headers.set('X-Content-Type-Options', 'nosniff')
+    return response
+  }
+
+  // Default response
+  const response = NextResponse.next()
   response.headers.set('X-XSS-Protection', '1; mode=block')
   response.headers.set('X-Content-Type-Options', 'nosniff')
-
   return response
 }
 
@@ -59,8 +105,8 @@ export const config = {
      * Match all request paths except for:
      * - _next/static (static files)
      * - _next/image (image optimization files)
-     * - favicon.ico, sitemap.xml, robots.txt
+     * - favicon.ico, sitemap.xml, robots.txt, icon.png
      */
-    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+    '/((?!_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|icon.png).*)',
   ],
 }

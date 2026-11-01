@@ -7,9 +7,11 @@ import { Badge, Button } from '@/components/ui/primitives'
 import { PROCEDURES } from '@/data/procedures'
 import { formatINR } from '@/lib/utils'
 import { useQuote } from '@/components/ui/QuoteModal'
+import { useCurrency } from '@/context/CurrencyContext'
 
 export function HomePricingExplorer() {
   const { openQuoteModal } = useQuote()
+  const { currency, formatRange } = useCurrency()
   const [selectedSpecialty, setSelectedSpecialty] = useState('all')
 
   const PRICING_COMPARISONS = [
@@ -122,8 +124,7 @@ export function HomePricingExplorer() {
               <thead>
                 <tr className="border-b border-slate-200 bg-slate-100/80 text-[11px] font-extrabold uppercase tracking-wider text-slate-600">
                   <th className="py-3.5 px-4">Treatment / Procedure</th>
-                  <th className="py-3.5 px-4">India Package (INR)</th>
-                  <th className="py-3.5 px-4">India (USD Approx.)</th>
+                  <th className="py-3.5 px-4">India Package ({currency})</th>
                   <th className="py-3.5 px-4">US / UK Average Cost</th>
                   <th className="py-3.5 px-4">Your Savings</th>
                   <th className="py-3.5 px-4 text-right">Get Quote</th>
@@ -131,9 +132,6 @@ export function HomePricingExplorer() {
               </thead>
               <tbody className="divide-y divide-slate-200 text-xs">
                 {filtered.map((item, idx) => {
-                  const indiaUSDMin = Math.round(item.indiaMin / 86).toLocaleString()
-                  const indiaUSDMax = Math.round(item.indiaMax / 86).toLocaleString()
-
                   return (
                     <tr key={idx} className="hover:bg-white transition-colors">
                       <td className="py-3.5 px-4 font-bold text-slate-900 text-sm">
@@ -143,10 +141,7 @@ export function HomePricingExplorer() {
                         </span>
                       </td>
                       <td className="py-3.5 px-4 font-extrabold text-brand-700 text-sm">
-                        {formatINR(item.indiaMin)} – {formatINR(item.indiaMax)}
-                      </td>
-                      <td className="py-3.5 px-4 font-bold text-slate-800 text-sm">
-                        ${indiaUSDMin} – ${indiaUSDMax}
+                        {formatRange(item.indiaMin, item.indiaMax)}
                       </td>
                       <td className="py-3.5 px-4 text-slate-500 line-through">
                         ${item.usPriceUSD.toLocaleString()} (US) / ${item.ukPriceUSD.toLocaleString()} (UK)

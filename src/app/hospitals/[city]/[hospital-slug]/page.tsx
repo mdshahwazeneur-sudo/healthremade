@@ -9,29 +9,70 @@ import { PriceRange, AccreditationBadge, NPSScore } from '@/components/ui/medica
 import { JsonLd } from '@/components/ui/primitives'
 import { buildHospitalSchema, buildBreadcrumbSchema } from '@/lib/schema'
 import { HospitalHeroCTA, HospitalSidebarCTA } from '@/components/hospital/HospitalCTAs'
+import { FaqSection } from '@/components/ui/FaqSection'
+import { getHospitalFaqs } from '@/data/faqsData'
+import { getLocalizedHospital } from '@/lib/i18n/contentTranslator'
 
 type Params = Promise<{ city: string; 'hospital-slug': string }>
+type SearchParams = Promise<{ lang?: string }>
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
 export async function generateStaticParams() {
   return getAllHospitalParams()
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Params
+  searchParams?: SearchParams
+}): Promise<Metadata> {
   const { city, 'hospital-slug': slug } = await params
-  const hospital = getHospital(city, slug)
-  if (!hospital) return {}
+  const { lang } = (await searchParams) || {}
+  const rawHospital = getHospital(city, slug)
+  if (!rawHospital) return {}
+
+  const hospital = getLocalizedHospital(rawHospital, lang || 'en')
 
   return {
     title: `${hospital.name} — ${hospital.cityLabel} | healthremade`,
     description: `${hospital.description.slice(0, 155)}…`,
-    alternates: { canonical: `/hospitals/${city}/${slug}` },
+    alternates: {
+      canonical: `${SITE_URL}/hospitals/${city}/${slug}`,
+      languages: {
+        en: `${SITE_URL}/hospitals/${city}/${slug}`,
+        bn: `${SITE_URL}/bn/hospitals/${city}/${slug}`,
+        ar: `${SITE_URL}/ar/hospitals/${city}/${slug}`,
+        ru: `${SITE_URL}/ru/hospitals/${city}/${slug}`,
+        fr: `${SITE_URL}/fr/hospitals/${city}/${slug}`,
+        sw: `${SITE_URL}/sw/hospitals/${city}/${slug}`,
+        uz: `${SITE_URL}/uz/hospitals/${city}/${slug}`,
+        ro: `${SITE_URL}/ro/hospitals/${city}/${slug}`,
+        pt: `${SITE_URL}/pt/hospitals/${city}/${slug}`,
+        es: `${SITE_URL}/es/hospitals/${city}/${slug}`,
+        de: `${SITE_URL}/de/hospitals/${city}/${slug}`,
+        tr: `${SITE_URL}/tr/hospitals/${city}/${slug}`,
+        'x-default': `${SITE_URL}/hospitals/${city}/${slug}`,
+      },
+    },
   }
 }
 
-export default async function HospitalPage({ params }: { params: Params }) {
+export default async function HospitalPage({
+  params,
+  searchParams,
+}: {
+  params: Params
+  searchParams?: SearchParams
+}) {
   const { city, 'hospital-slug': slug } = await params
-  const hospital = getHospital(city, slug)
-  if (!hospital) notFound()
+  const { lang } = (await searchParams) || {}
+  const rawHospital = getHospital(city, slug)
+  if (!rawHospital) notFound()
+
+  const hospital = getLocalizedHospital(rawHospital, lang || 'en')
 
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
   const pageUrl = `${SITE_URL}/hospitals/${city}/${slug}`
@@ -322,18 +363,30 @@ export default async function HospitalPage({ params }: { params: Params }) {
 
             <Card>
               <CardContent className="p-5">
-                <h3 className="font-semibold text-foreground mb-3">Enquire about this hospital</h3>
-                <p className="text-xs text-muted-foreground mb-3">
-                  Create a free account to send an enquiry. We never share your details without consent.
+                <h3 className="font-semibold text-foreground mb-2">Have a question about this hospital?</h3>
+                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
+                  Ask in our discussion forum or request a direct itemized package estimate. No account or sign-up required.
                 </p>
-                <Button size="md" className="w-full" asChild>
-                  <Link href="/register">Create account to enquire</Link>
-                </Button>
+                <Link
+                  href="/forum"
+                  className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-slate-50 hover:bg-slate-100 py-2.5 px-3 text-xs font-semibold text-slate-800 transition-colors"
+                >
+                  Ask in Discussion Forum →
+                </Link>
               </CardContent>
             </Card>
           </aside>
         </div>
       </section>
+
+      {/* ─── AEO & GEO FAQ Section (10 Hospital Specific Questions) ─── */}
+      <FaqSection
+        title={`Frequently Asked Questions About ${hospital.name}`}
+        subtitle={`International accreditation, medical visas, companion stay, and package pricing at ${hospital.name} in ${hospital.cityLabel}.`}
+        badgeText="AEO & GEO Hospital Guide"
+        faqs={getHospitalFaqs(hospital)}
+        className="border-t border-slate-200/80 bg-slate-50/50"
+      />
     </>
   )
 }

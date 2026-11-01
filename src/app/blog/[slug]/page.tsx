@@ -20,9 +20,11 @@ import { INITIAL_SEO_BLOG_POSTS, type SeoBlogPost } from '@/data/blogPipelineDat
 import { MOCK_BLOG_POSTS } from '@/data/adminData'
 import { Badge, Button, Card, CardContent } from '@/components/ui/primitives'
 import { JsonLd } from '@/components/ui/primitives'
-import { buildBreadcrumbSchema } from '@/lib/schema'
+import { buildBreadcrumbSchema, buildFAQSchema } from '@/lib/schema'
 import { buildArticleStructuredSchema } from '@/lib/blogAi'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
+import { FaqSection } from '@/components/ui/FaqSection'
+import { getBlogFaqs } from '@/data/faqsData'
 import {
   BlogQuoteButton,
   BlogWhatsAppButton,
@@ -30,6 +32,9 @@ import {
 } from '@/components/blog/BlogInteractiveComponents'
 
 type Params = Promise<{ slug: string }>
+type SearchParams = Promise<{ lang?: string }>
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
 export async function generateStaticParams() {
   // Only pre-render published articles
@@ -40,15 +45,40 @@ export async function generateStaticParams() {
   return [...seoSlugs, ...mockSlugs]
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Params
+  searchParams?: SearchParams
+}): Promise<Metadata> {
   const { slug } = await params
+  const { lang } = (await searchParams) || {}
 
   const seoPost = INITIAL_SEO_BLOG_POSTS.find((p) => p.slug === slug && p.status === 'published')
   if (seoPost) {
+    const titlePrefix = lang && lang !== 'en' ? `[${lang.toUpperCase()}] ` : ''
     return {
-      title: `${seoPost.metaTitle || seoPost.title} | healthremade`,
+      title: `${titlePrefix}${seoPost.metaTitle || seoPost.title} | healthremade`,
       description: seoPost.metaDescription,
-      alternates: { canonical: `/blog/${slug}` },
+      alternates: {
+        canonical: `${SITE_URL}/blog/${slug}`,
+        languages: {
+          en: `${SITE_URL}/blog/${slug}`,
+          bn: `${SITE_URL}/bn/blog/${slug}`,
+          ar: `${SITE_URL}/ar/blog/${slug}`,
+          ru: `${SITE_URL}/ru/blog/${slug}`,
+          fr: `${SITE_URL}/fr/blog/${slug}`,
+          sw: `${SITE_URL}/sw/blog/${slug}`,
+          uz: `${SITE_URL}/uz/blog/${slug}`,
+          ro: `${SITE_URL}/ro/blog/${slug}`,
+          pt: `${SITE_URL}/pt/blog/${slug}`,
+          es: `${SITE_URL}/es/blog/${slug}`,
+          de: `${SITE_URL}/de/blog/${slug}`,
+          tr: `${SITE_URL}/tr/blog/${slug}`,
+          'x-default': `${SITE_URL}/blog/${slug}`,
+        },
+      },
       robots: { index: true, follow: true },
     }
   }
@@ -58,7 +88,24 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
     return {
       title: `${legacyPost.title} | healthremade`,
       description: legacyPost.excerpt,
-      alternates: { canonical: `/blog/${slug}` },
+      alternates: {
+        canonical: `${SITE_URL}/blog/${slug}`,
+        languages: {
+          en: `${SITE_URL}/blog/${slug}`,
+          bn: `${SITE_URL}/bn/blog/${slug}`,
+          ar: `${SITE_URL}/ar/blog/${slug}`,
+          ru: `${SITE_URL}/ru/blog/${slug}`,
+          fr: `${SITE_URL}/fr/blog/${slug}`,
+          sw: `${SITE_URL}/sw/blog/${slug}`,
+          uz: `${SITE_URL}/uz/blog/${slug}`,
+          ro: `${SITE_URL}/ro/blog/${slug}`,
+          pt: `${SITE_URL}/pt/blog/${slug}`,
+          es: `${SITE_URL}/es/blog/${slug}`,
+          de: `${SITE_URL}/de/blog/${slug}`,
+          tr: `${SITE_URL}/tr/blog/${slug}`,
+          'x-default': `${SITE_URL}/blog/${slug}`,
+        },
+      },
     }
   }
 
@@ -107,6 +154,13 @@ export default async function BlogPostPage({ params }: { params: Params }) {
   // Other related guides for bottom recommendation
   const otherPosts = INITIAL_SEO_BLOG_POSTS.filter((p) => p.slug !== slug && p.status === 'published').slice(0, 3)
 
+  // Build 10+ Comprehensive FAQs for AEO & GEO
+  const blogFaqs = getBlogFaqs(
+    post.title,
+    post.category,
+    isSeoPost ? postData.faqItems : (legacyPost as any).faqs || []
+  )
+
   // Build JSON-LD Schemas with medicallyReviewedBy & FAQPage
   let jsonLdSchemas: any[] = []
   if (isSeoPost) {
@@ -117,6 +171,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
         { name: postData.title, url: `${SITE_URL}/blog/${slug}` },
       ]),
       ...buildArticleStructuredSchema(postData, SITE_URL),
+      buildFAQSchema({ questions: blogFaqs }),
     ]
   } else {
     jsonLdSchemas = [
@@ -137,6 +192,7 @@ export default async function BlogPostPage({ params }: { params: Params }) {
           jobTitle: legacyPost!.reviewerDesignation,
         },
       },
+      buildFAQSchema({ questions: blogFaqs }),
     ]
   }
 
@@ -385,28 +441,17 @@ export default async function BlogPostPage({ params }: { params: Params }) {
                 </div>
               </div>
 
-              {/* Structured FAQ Section (FAQPage Schema) */}
-              {isSeoPost && postData.faqItems && postData.faqItems.length > 0 && (
-                <div id="frequently-asked-questions" className="pt-8 border-t border-slate-200 space-y-5 scroll-mt-24">
-                  <div className="space-y-1">
-                    <h3 className="text-xl sm:text-2xl font-black text-slate-900 flex items-center gap-2">
-                      <HelpCircle className="h-6 w-6 text-brand-600" />
-                      Frequently Asked Questions
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-500">
-                      Common clinical, cost, and logistics questions answered by our medical panel.
-                    </p>
-                  </div>
-                  <div className="space-y-3.5">
-                    {postData.faqItems.map((faq, fIdx) => (
-                      <div key={fIdx} className="rounded-2xl border border-slate-200 bg-slate-50/70 p-5 space-y-2">
-                        <h4 className="text-sm sm:text-base font-bold text-slate-900">{faq.question}</h4>
-                        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{faq.answer}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              {/* Structured FAQ Section (AEO & GEO FAQPage) */}
+              <div id="frequently-asked-questions" className="scroll-mt-24 pt-4">
+                <FaqSection
+                  title="Frequently Asked Questions"
+                  subtitle="Clinical indications, package pricing, medical visas, and recovery guidelines answered by our medical panel."
+                  badgeText="AEO & GEO Clinical Guide"
+                  faqs={blogFaqs}
+                  prefillTreatment={post.category}
+                  className="py-6 sm:py-8 border-t border-slate-200"
+                />
+              </div>
             </article>
 
             {/* Right Sticky Sidebar (4 Cols) */}

@@ -8,6 +8,9 @@ import { Badge, Button, Card, CardContent, JsonLd } from '@/components/ui/primit
 import { formatINR } from '@/lib/utils'
 import { buildBreadcrumbSchema } from '@/lib/schema'
 import { WhatsAppCTA } from '@/components/ui/WhatsAppCTA'
+import { PriceText } from '@/context/CurrencyContext'
+import { FaqSection } from '@/components/ui/FaqSection'
+import { getSpecialtyFaqs } from '@/data/faqsData'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
@@ -130,7 +133,9 @@ export default async function SpecialtyPage({ params }: { params: Params }) {
                   <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
                     <div>
                       <p className="text-[10px] uppercase font-bold text-slate-600 tracking-wider">Estimated Package</p>
-                      <p className="text-sm font-extrabold text-slate-900">From {formatINR(proc.priceInrMin)}</p>
+                      <p className="text-sm font-extrabold text-slate-900">
+                        From <PriceText amountInr={proc.priceInrMin} />
+                      </p>
                     </div>
                     <span className="inline-flex items-center gap-1 text-xs font-semibold text-brand-600 group-hover:translate-x-0.5 transition-transform">
                       Details <ChevronRight className="h-3.5 w-3.5" />
@@ -188,6 +193,16 @@ export default async function SpecialtyPage({ params }: { params: Params }) {
           </div>
         </div>
       </div>
+
+      {/* ─── AEO & GEO FAQ Section (10 Specialty Specific Questions) ─── */}
+      <FaqSection
+        title={`Frequently Asked Questions About ${label} in India`}
+        subtitle={`Clinical success rates, FDA-approved implants, visa timelines, and itemized packages for ${label.toLowerCase()}.`}
+        badgeText="AEO & GEO Specialty Guide"
+        faqs={getSpecialtyFaqs(specialty, label)}
+        prefillTreatment={label}
+        className="border-t border-slate-200/80 bg-slate-50/60"
+      />
     </>
   )
 }

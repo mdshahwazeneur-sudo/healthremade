@@ -9,35 +9,41 @@ import { Button } from '@/components/ui/primitives'
 import { useQuote } from '@/components/ui/QuoteModal'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
 import { LanguageSelector } from '@/components/ui/LanguageSelector'
-
-const NAV_LINKS = [
-  { label: 'Home', href: '/' },
-  {
-    label: 'Treatments',
-    href: '/treatments',
-    children: [
-      { label: 'Cardiac Surgery (CABG)', href: '/treatments/cardiac/bypass-surgery' },
-      { label: 'Total Knee Replacement', href: '/treatments/orthopaedics/knee-replacement' },
-      { label: 'Liver Transplantation', href: '/treatments/transplant/liver-transplant' },
-      { label: 'IVF & Fertility Treatment', href: '/treatments/fertility/ivf' },
-      { label: 'Spinal Fusion Surgery', href: '/treatments/neurology/spinal-fusion' },
-      { label: 'View All Treatments →', href: '/treatments' },
-    ],
-  },
-  { label: 'Hospitals', href: '/hospitals' },
-  { label: 'Top Doctors', href: '/doctors' },
-  { label: 'Pricing Explorer', href: '/pricing' },
-  { label: 'Testimonials', href: '/testimonials' },
-  { label: 'Cost Guides & Blog', href: '/blog' },
-]
+import { useLanguage } from '@/context/LanguageContext'
 
 export function Navbar() {
   const pathname = usePathname()
+  const { t, locale } = useLanguage()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const { openQuoteModal } = useQuote()
 
-  const waUrl = getWhatsAppUrl({ pageType: 'home' })
+  const waUrl = getWhatsAppUrl({ pageType: 'home', lang: locale })
+
+  const navLinks = [
+    { label: t.nav.home, href: '/' },
+    {
+      label: t.nav.treatments,
+      href: '/treatments',
+      children: [
+        { label: 'Cardiac Surgery (CABG)', href: '/treatments/cardiac/bypass-surgery' },
+        { label: 'Total Knee Replacement', href: '/treatments/orthopaedics/knee-replacement' },
+        { label: 'Liver Transplantation', href: '/treatments/transplant/liver-transplant' },
+        { label: 'IVF & Fertility Treatment', href: '/treatments/fertility/ivf' },
+        { label: 'Spinal Fusion Surgery', href: '/treatments/neurology/spinal-fusion' },
+        { label: t.nav.allTreatments, href: '/treatments' },
+      ],
+    },
+    { label: t.nav.hospitals, href: '/hospitals' },
+    { label: t.nav.doctors, href: '/doctors' },
+    { label: t.nav.pricing, href: '/pricing' },
+    { label: t.nav.testimonials, href: '/testimonials' },
+    { label: t.nav.blog, href: '/blog' },
+  ]
+
+  if (pathname.startsWith('/forum')) {
+    return null
+  }
 
   const isLinkActive = (href: string) => {
     if (href === '/') {
@@ -54,10 +60,10 @@ export function Navbar() {
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-1">
               <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span>International Patient Desk: 24/7 Response</span>
+              <span>{t.nav.emergencyHotline}</span>
             </span>
             <span className="text-slate-600">|</span>
-            <span>Free Hospital Package Quotes & Doctor Opinions in 24 Hours</span>
+            <span>{t.nav.subHeaderBanner}</span>
           </div>
           <div className="flex items-center gap-4">
             <a
@@ -93,7 +99,7 @@ export function Navbar() {
 
         {/* Desktop nav */}
         <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
-          {NAV_LINKS.map((link) => {
+          {navLinks.map((link) => {
             const active = isLinkActive(link.href)
             return link.children ? (
               <div
@@ -178,11 +184,7 @@ export function Navbar() {
             className="shadow-xs font-semibold"
           >
             <FileText className="h-4 w-4 mr-1" />
-            Get Free Quote
-          </Button>
-
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/login">Sign in</Link>
+            {t.nav.getQuote}
           </Button>
         </div>
 
@@ -197,7 +199,7 @@ export function Navbar() {
             onClick={() => openQuoteModal()}
             className="text-[11px] sm:text-xs px-2.5 sm:px-3 py-1 h-8 font-bold shadow-xs"
           >
-            Free Quote
+            {t.nav.getQuote}
           </Button>
 
           <button
@@ -236,7 +238,7 @@ export function Navbar() {
           </div>
 
           <nav className="flex flex-col gap-1.5" aria-label="Mobile navigation">
-            {NAV_LINKS.map((link) => {
+            {navLinks.map((link) => {
               const active = isLinkActive(link.href)
               return (
                 <div key={link.label}>
@@ -290,12 +292,7 @@ export function Navbar() {
               className="w-full justify-center"
             >
               <FileText className="h-4 w-4 mr-1.5" />
-              Get Free Hospital Quote
-            </Button>
-            <Button variant="outline" size="md" asChild className="w-full justify-center">
-              <Link href="/login" onClick={() => setMobileOpen(false)}>
-                Sign in to Patient Portal
-              </Link>
+              {t.nav.getQuote}
             </Button>
           </div>
         </div>

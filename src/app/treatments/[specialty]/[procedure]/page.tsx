@@ -10,30 +10,71 @@ import { JsonLd } from '@/components/ui/primitives'
 import { buildMedicalProcedureSchema, buildFAQSchema, buildBreadcrumbSchema } from '@/lib/schema'
 
 import { TreatmentHeroCTA, TreatmentSidebarCTA } from '@/components/treatment/TreatmentCTAs'
+import { FaqSection } from '@/components/ui/FaqSection'
+import { getProcedureFaqs } from '@/data/faqsData'
+import { getLocalizedProcedure } from '@/lib/i18n/contentTranslator'
 
 type Params = Promise<{ specialty: string; procedure: string }>
+type SearchParams = Promise<{ lang?: string }>
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
 export async function generateStaticParams() {
   return getAllProcedureParams()
 }
 
-export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+  searchParams,
+}: {
+  params: Params
+  searchParams?: SearchParams
+}): Promise<Metadata> {
   const { specialty, procedure } = await params
-  const proc = getProcedure(specialty, procedure)
-  if (!proc) return {}
+  const { lang } = (await searchParams) || {}
+  const rawProc = getProcedure(specialty, procedure)
+  if (!rawProc) return {}
+  const proc = getLocalizedProcedure(rawProc, lang || 'en')
+
   return {
-    title: proc.seoTitle,
-    description: proc.seoDescription,
-    openGraph: { title: proc.seoTitle, description: proc.seoDescription },
-    alternates: { canonical: `/treatments/${specialty}/${procedure}` },
+    title: `${proc.name} Cost in India | healthremade`,
+    description: proc.description.slice(0, 160),
+    openGraph: { title: `${proc.name} in India`, description: proc.description.slice(0, 160) },
+    alternates: {
+      canonical: `${SITE_URL}/treatments/${specialty}/${procedure}`,
+      languages: {
+        en: `${SITE_URL}/treatments/${specialty}/${procedure}`,
+        bn: `${SITE_URL}/bn/treatments/${specialty}/${procedure}`,
+        ar: `${SITE_URL}/ar/treatments/${specialty}/${procedure}`,
+        ru: `${SITE_URL}/ru/treatments/${specialty}/${procedure}`,
+        fr: `${SITE_URL}/fr/treatments/${specialty}/${procedure}`,
+        sw: `${SITE_URL}/sw/treatments/${specialty}/${procedure}`,
+        uz: `${SITE_URL}/uz/treatments/${specialty}/${procedure}`,
+        ro: `${SITE_URL}/ro/treatments/${specialty}/${procedure}`,
+        pt: `${SITE_URL}/pt/treatments/${specialty}/${procedure}`,
+        es: `${SITE_URL}/es/treatments/${specialty}/${procedure}`,
+        de: `${SITE_URL}/de/treatments/${specialty}/${procedure}`,
+        tr: `${SITE_URL}/tr/treatments/${specialty}/${procedure}`,
+        'x-default': `${SITE_URL}/treatments/${specialty}/${procedure}`,
+      },
+    },
   }
 }
 
-export default async function TreatmentPage({ params }: { params: Params }) {
+export default async function TreatmentPage({
+  params,
+  searchParams,
+}: {
+  params: Params
+  searchParams?: SearchParams
+}) {
   const { specialty, procedure: slug } = await params
-  const proc = getProcedure(specialty, slug)
-  if (!proc) notFound()
+  const { lang } = (await searchParams) || {}
+  const rawProc = getProcedure(specialty, slug)
+  if (!rawProc) notFound()
+  const proc = getLocalizedProcedure(rawProc, lang || 'en')
   const packages = getPackagesForProcedure(proc!.id)
+  const procedureFaqs = getProcedureFaqs(proc)
   const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
   const pageUrl = `${SITE_URL}/treatments/${specialty}/${slug}`
 
@@ -43,7 +84,7 @@ export default async function TreatmentPage({ params }: { params: Params }) {
       description: proc.description,
       url: pageUrl,
     }),
-    buildFAQSchema({ questions: proc.faqs }),
+    buildFAQSchema({ questions: procedureFaqs }),
     buildBreadcrumbSchema([
       { name: 'Home', url: SITE_URL },
       { name: 'Treatments', url: `${SITE_URL}/treatments` },
@@ -197,22 +238,7 @@ export default async function TreatmentPage({ params }: { params: Params }) {
               )}
             </div>
 
-            {/* FAQ */}
-            <div>
-              <h2 className="text-xl font-bold text-foreground mb-4">Frequently asked questions</h2>
-              <div className="space-y-4">
-                {proc.faqs.map((faq, i) => (
-                  <details key={i} className="group rounded-lg border border-border bg-white p-4 open:shadow-sm">
-                    <summary className="flex cursor-pointer items-center justify-between font-medium text-foreground list-none">
-                      {faq.question}
-                      <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-90" />
-                    </summary>
-                    <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
-                  </details>
-                ))}
-              </div>
             </div>
-          </div>
 
           {/* Right sidebar */}
           <aside className="space-y-6">
@@ -266,6 +292,16 @@ export default async function TreatmentPage({ params }: { params: Params }) {
           </aside>
         </div>
       </section>
+
+      {/* ─── AEO & GEO FAQ Section (10 Detailed Procedure Questions) ─── */}
+      <FaqSection
+        title={`Frequently Asked Questions About ${proc.name}`}
+        subtitle={`Clinical indications, package inclusions, FDA-approved implants, recovery milestones, and airline travel clearance for ${proc.name} in India.`}
+        badgeText="AEO & GEO Procedure Guide"
+        faqs={procedureFaqs}
+        prefillTreatment={proc.name}
+        className="border-t border-slate-200/80 bg-slate-50/60"
+      />
     </>
   )
 }

@@ -17,6 +17,7 @@ import { PROCEDURES } from '@/data/procedures'
 import { HOSPITALS } from '@/data/hospitals'
 import { Badge, Button, Card, CardContent } from '@/components/ui/primitives'
 import { formatINR } from '@/lib/utils'
+import { PriceRangeText } from '@/context/CurrencyContext'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
 import { TreatmentHeroCTA } from '@/components/treatment/TreatmentCTAs'
 
@@ -113,9 +114,7 @@ export default async function AdLandingPage({ params }: { params: Params }) {
           <div className="inline-flex items-center gap-3 bg-white border border-slate-200/80 rounded-2xl p-3 sm:px-6 shadow-sm">
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-500 block">Indicative Hospital Tariff</span>
-              <span className="text-xl sm:text-2xl font-extrabold text-brand-700">
-                {formatINR(proc.priceInrMin)} – {formatINR(proc.priceInrMax)}
-              </span>
+              <PriceRangeText minInr={proc.priceInrMin} maxInr={proc.priceInrMax} className="text-xl sm:text-2xl font-extrabold text-brand-700 block" />
             </div>
             <div className="h-8 w-px bg-slate-200" />
             <div className="text-left text-xs text-slate-600">
@@ -164,9 +163,7 @@ export default async function AdLandingPage({ params }: { params: Params }) {
 
                   <div className="sm:text-right shrink-0">
                     <span className="text-xs text-slate-500 block">Package Tariff</span>
-                    <span className="text-lg font-extrabold text-slate-900 block">
-                      {formatINR(pkg.priceInrMin)} – {formatINR(pkg.priceInrMax)}
-                    </span>
+                    <PriceRangeText minInr={pkg.priceInrMin} maxInr={pkg.priceInrMax} className="text-lg font-extrabold text-slate-900 block" />
                   </div>
                 </CardContent>
               </Card>

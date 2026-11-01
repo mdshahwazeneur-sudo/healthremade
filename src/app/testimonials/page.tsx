@@ -6,6 +6,8 @@ import { JsonLd } from '@/components/ui/primitives'
 import { buildBreadcrumbSchema } from '@/lib/schema'
 import { TestimonialsBarView } from '@/components/testimonials/TestimonialsBarView'
 import { OutcomesHeroCTA, OutcomesBottomCTA } from '@/components/outcomes/OutcomesCTAs'
+import { FaqSection } from '@/components/ui/FaqSection'
+import { getTestimonialFaqs } from '@/data/faqsData'
 
 export const metadata: Metadata = {
   title: 'Patient Video Testimonials & Verified Clinical Outcomes | healthremade',
@@ -81,6 +83,15 @@ export default function TestimonialsPage() {
           <TestimonialsBarView />
         </div>
       </section>
+
+      {/* ─── AEO & GEO FAQ Section (10 Detailed Questions & Schema) ──── */}
+      <FaqSection
+        title="Patient Stories & Verification FAQs"
+        subtitle="Authenticity checks, verified savings benchmarks, travel logistics, and hospital care answered for prospective patients."
+        badgeText="AEO & GEO Verified Patient Guide"
+        faqs={getTestimonialFaqs()}
+        className="bg-white border-t border-slate-200/80"
+      />
 
       {/* ─── Bottom CTA ──────────────────────────────────────────── */}
       <OutcomesBottomCTA />

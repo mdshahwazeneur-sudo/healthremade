@@ -7,6 +7,8 @@ import { buildOrganizationSchema } from '@/lib/schema'
 import { QuoteProvider } from '@/components/ui/QuoteModal'
 import { WhatsAppFloat } from '@/components/ui/WhatsAppFloat'
 import { AdminDataProvider } from '@/context/AdminDataContext'
+import { CurrencyProvider } from '@/context/CurrencyContext'
+import { GoogleTranslateBridge } from '@/components/ui/GoogleTranslateBridge'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
@@ -35,6 +37,24 @@ export const metadata: Metadata = {
     'IVF India cost',
     'best hospital Delhi India',
   ],
+  alternates: {
+    canonical: SITE_URL,
+    languages: {
+      'en': SITE_URL,
+      'bn': `${SITE_URL}?lang=bn`,
+      'ar': `${SITE_URL}?lang=ar`,
+      'ru': `${SITE_URL}?lang=ru`,
+      'fr': `${SITE_URL}?lang=fr`,
+      'sw': `${SITE_URL}?lang=sw`,
+      'uz': `${SITE_URL}?lang=uz`,
+      'ro': `${SITE_URL}?lang=ro`,
+      'pt': `${SITE_URL}?lang=pt`,
+      'es': `${SITE_URL}?lang=es`,
+      'de': `${SITE_URL}?lang=de`,
+      'tr': `${SITE_URL}?lang=tr`,
+      'x-default': SITE_URL,
+    },
+  },
   openGraph: {
     type: 'website',
     locale: 'en_GB',
@@ -54,6 +74,8 @@ export const metadata: Metadata = {
   },
 }
 
+import { LanguageProvider } from '@/context/LanguageContext'
+
 export default function RootLayout({
   children,
 }: {
@@ -62,15 +84,20 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased font-sans">
       <body className="flex min-h-full flex-col bg-background text-foreground">
+        <GoogleTranslateBridge />
         <JsonLd data={buildOrganizationSchema(SITE_URL)} />
-        <AdminDataProvider>
-          <QuoteProvider>
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <WhatsAppFloat />
-          </QuoteProvider>
-        </AdminDataProvider>
+        <LanguageProvider>
+          <AdminDataProvider>
+            <CurrencyProvider>
+              <QuoteProvider>
+                <Navbar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+                <WhatsAppFloat />
+              </QuoteProvider>
+            </CurrencyProvider>
+          </AdminDataProvider>
+        </LanguageProvider>
       </body>
     </html>
   )

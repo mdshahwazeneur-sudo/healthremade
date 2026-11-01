@@ -17,6 +17,7 @@ import {
   Lock,
   ArrowRight,
   HeartHandshake,
+  AlertCircle,
 } from 'lucide-react'
 import { type LandingPageRecord } from '@/data/landingPagesData'
 import { type Hospital } from '@/data/hospitals'
@@ -25,6 +26,12 @@ import { Badge, Button, Card, CardContent } from '@/components/ui/primitives'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
 import { useAdminData } from '@/context/AdminDataContext'
 import { sanitizeInput } from '@/lib/security'
+import { submitPatientLead } from '@/lib/supabase/leads'
+import {
+  getCountryPhoneRule,
+  validatePhoneNumber,
+} from '@/lib/phoneValidation'
+import { useActiveLanguage } from '@/components/ui/LanguageSelector'
 
 interface Props {
   lp: LandingPageRecord
@@ -33,15 +40,20 @@ interface Props {
 }
 
 export function PublicLandingPageClient({ lp, hospitals, doctors }: Props) {
+  const activeLang = useActiveLanguage()
   const { recordLandingPageView, recordLandingPageSubmission, addLead } = useAdminData()
 
   const [name, setName] = useState('')
-  const [phone, setPhone] = useState(lp.formConfig.countryCode ? `${lp.formConfig.countryCode} ` : '+44 ')
+  const [subscriberNumber, setSubscriberNumber] = useState('')
+  const [phoneTouched, setPhoneTouched] = useState(false)
   const [cityPref, setCityPref] = useState('Delhi NCR (Gurugram/Delhi)')
   const [notes, setNotes] = useState('')
   const [honeypot, setHoneypot] = useState('')
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+
+  const countryRule = getCountryPhoneRule(lp.targetCountry)
+  const phoneValidation = validatePhoneNumber(subscriberNumber, lp.targetCountry)
 
   // Track page view in analytics on mount
   useEffect(() => {
@@ -50,29 +62,81 @@ export function PublicLandingPageClient({ lp, hospitals, doctors }: Props) {
 
   const currencySymbol = lp.currency === 'USD' ? '$' : lp.currency === 'GBP' ? '£' : lp.currency === 'EUR' ? '€' : '₹'
 
+  const getLocalizedLpMessage = () => {
+    const cleanName = sanitizeInput(name, 100)
+    const phoneStr = phoneValidation.e164Number
+    const priceText = `${currencySymbol}${lp.priceMin.toLocaleString()} - ${currencySymbol}${lp.priceMax.toLocaleString()}`
+
+    if (activeLang === 'bn') {
+      return name
+        ? `নমস্কার Healthremade! আমার নাম ${cleanName} (${lp.targetCountry})। আমি ${lp.procedureName} প্যাকেজ (${priceText}) দেখেছি এবং বিশেষজ্ঞ ডাক্তারের মতামত ও হাসপাতালের তুলনা জানতে চাই। ফোন: ${phoneStr}`
+        : `নমস্কার Healthremade! আমি ${lp.targetCountry}-র রোগীদের জন্য ${lp.procedureName} প্যাকেজ দেখেছি এবং বিনামূল্যে হাসপাতালের কোটেশন পেতে চাই।`
+    }
+    if (activeLang === 'ar') {
+      return name
+        ? `مرحباً Healthremade! اسمي ${cleanName} (${lp.targetCountry}). رأيت باقة ${lp.procedureName} (${priceText}) وأود الحصول على استشارة طبية مجانية ومقارنة المستشفيات. هاتف: ${phoneStr}`
+        : `مرحباً Healthremade! رأيت باقة ${lp.procedureName} لمرضى ${lp.targetCountry} وأود الحصول على عروض أسعار مجانية للمستشفيات.`
+    }
+    if (activeLang === 'ru') {
+      return name
+        ? `Здравствуйте, Healthremade! Меня зовут ${cleanName} (${lp.targetCountry}). Я ознакомился с пакетом ${lp.procedureName} (${priceText}) и хочу получить бесплатную консультацию врача и расчет клиник. Телефон: ${phoneStr}`
+        : `Здравствуйте, Healthremade! Меня интересует пакет ${lp.procedureName} для пациентов из ${lp.targetCountry}. Хочу получить предложения клиник.`
+    }
+    if (activeLang === 'fr') {
+      return name
+        ? `Bonjour Healthremade! Je m'appelle ${cleanName} (${lp.targetCountry}). J'ai vu le forfait ${lp.procedureName} (${priceText}) et souhaite obtenir un avis médical gratuit et une comparaison d'hôpitaux. Téléphone: ${phoneStr}`
+        : `Bonjour Healthremade! J'ai vu le forfait ${lp.procedureName} pour les patients de ${lp.targetCountry} et souhaite recevoir des devis d'hôpitaux gratuits.`
+    }
+    return name
+      ? `Hello healthremade! My name is ${cleanName} (${lp.targetCountry}). I saw the verified ${lp.procedureName} package (${priceText}) and would like to get a free doctor opinion and hospital comparison. My phone is ${phoneStr}`
+      : `Hello healthremade! I saw the ${lp.procedureName} package for ${lp.targetCountry} patients and would like free hospital quotes.`
+  }
+
   const waUrl = getWhatsAppUrl({
     pageType: 'treatment',
+    lang: activeLang,
     treatmentName: lp.procedureName,
-    customMessage: name
-      ? `Hello healthremade! My name is ${sanitizeInput(name, 100)} (${lp.targetCountry}). I saw the verified ${lp.procedureName} package (${currencySymbol}${lp.priceMin.toLocaleString()} - ${currencySymbol}${lp.priceMax.toLocaleString()}) and would like to get a free doctor opinion and hospital comparison.`
-      : `Hello healthremade! I saw the ${lp.procedureName} package for ${lp.targetCountry} patients and would like free hospital quotes.`,
+    customMessage: getLocalizedLpMessage(),
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (honeypot.trim().length > 0) {
       setSubmitted(true)
       return
     }
 
+    // Strict Phone Completeness Check
+    const validation = validatePhoneNumber(subscriberNumber, lp.targetCountry)
+    if (!validation.isValid) {
+      setPhoneTouched(true)
+      return
+    }
+
     setIsSubmitting(true)
+
+    const cleanName = sanitizeInput(name, 100)
+    const cleanPhone = validation.fullFormattedNumber
+
+    // Push into Supabase Leads
+    await submitPatientLead({
+      patientName: cleanName || 'Anonymous Patient',
+      country: lp.targetCountry,
+      whatsappNumber: cleanPhone,
+      treatmentNeeded: lp.procedureName,
+      preferredHospital: lp.hospitalNames[0] || 'Top Accredited Hospital',
+      preferredCity: cityPref,
+      medicalSummary: notes,
+      sourcePage: typeof window !== 'undefined' ? window.location.pathname : undefined,
+      honeypot,
+    })
 
     // Push into CRM Leads & record submission
     addLead({
-      patientName: sanitizeInput(name, 100),
+      patientName: cleanName,
       country: lp.targetCountry,
-      countryCode: lp.formConfig.countryCode,
-      phone: sanitizeInput(phone, 30),
+      countryCode: countryRule.code,
+      phone: cleanPhone,
       procedure: lp.procedureName,
       preferredHospital: lp.hospitalNames[0] || 'Top Accredited Hospital',
       preferredCity: cityPref,
@@ -96,10 +160,8 @@ export function PublicLandingPageClient({ lp, hospitals, doctors }: Props) {
 
     recordLandingPageSubmission(lp.slug)
 
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setSubmitted(true)
-    }, 600)
+    setIsSubmitting(false)
+    setSubmitted(true)
   }
 
   return (
@@ -279,18 +341,42 @@ export function PublicLandingPageClient({ lp, hospitals, doctors }: Props) {
                     />
                   </div>
 
+                  {/* Phone / WhatsApp input with country dial badge and strict completeness check */}
                   <div>
-                    <label className="block text-xs font-semibold text-slate-700 mb-1">
-                      WhatsApp / Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder={`${lp.formConfig.countryCode} 9876543210`}
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      className="w-full rounded-xl border border-slate-300 bg-slate-50 px-3 py-2 text-xs sm:text-sm text-slate-900 font-medium focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-600"
-                    />
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="block text-xs font-semibold text-slate-700">
+                        WhatsApp / Phone Number *
+                      </label>
+                      <span className="text-[11px] font-medium text-slate-500">
+                        {subscriberNumber.replace(/\D/g, '').length} / {countryRule.minDigits} digits
+                      </span>
+                    </div>
+
+                    <div className="flex items-center rounded-xl border border-slate-300 bg-slate-50 focus-within:bg-white focus-within:ring-2 focus-within:ring-brand-600 focus-within:border-brand-600 transition-all overflow-hidden">
+                      <div className="flex items-center gap-1.5 px-3 py-2 bg-slate-100 border-r border-slate-300 text-xs sm:text-sm font-semibold text-slate-700 select-none">
+                        <span>{countryRule.flag}</span>
+                        <span>{countryRule.code}</span>
+                      </div>
+                      <input
+                        type="tel"
+                        required
+                        placeholder={`e.g. ${countryRule.placeholder}`}
+                        value={subscriberNumber}
+                        onChange={(e) => {
+                          setSubscriberNumber(e.target.value)
+                          if (!phoneTouched) setPhoneTouched(true)
+                        }}
+                        onBlur={() => setPhoneTouched(true)}
+                        className="w-full bg-transparent px-3 py-2 text-xs sm:text-sm text-slate-900 font-medium focus:outline-none"
+                      />
+                    </div>
+
+                    {phoneTouched && !phoneValidation.isValid && (
+                      <div className="flex items-center gap-1.5 mt-1.5 text-xs text-rose-600 font-medium">
+                        <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                        <span>{phoneValidation.errorMessage}</span>
+                      </div>
+                    )}
                   </div>
 
                   <div>

@@ -7,8 +7,11 @@ import { getWhatsAppUrl, WhatsAppContext } from '@/lib/whatsapp'
 import { PROCEDURES } from '@/data/procedures'
 import { HOSPITALS } from '@/data/hospitals'
 
+import { useActiveLanguage } from '@/components/ui/LanguageSelector'
+
 export function WhatsAppFloat() {
   const pathname = usePathname()
+  const activeLang = useActiveLanguage()
   const [showTooltip, setShowTooltip] = useState(false)
   const [closedManually, setClosedManually] = useState(false)
 
@@ -24,26 +27,28 @@ export function WhatsAppFloat() {
 
   // Derive context based on current route
   const getContext = (): WhatsAppContext => {
+    const base: WhatsAppContext = { lang: activeLang }
     if (pathname === '/') {
-      return { pageType: 'home' }
+      return { ...base, pageType: 'home' }
     }
     if (pathname.startsWith('/pricing')) {
-      return { pageType: 'pricing' }
+      return { ...base, pageType: 'pricing' }
     }
     if (pathname.startsWith('/visa-and-travel')) {
-      return { pageType: 'visa' }
+      return { ...base, pageType: 'visa' }
     }
     if (pathname.startsWith('/how-we-work')) {
-      return { pageType: 'how-we-work' }
+      return { ...base, pageType: 'how-we-work' }
     }
     if (pathname.startsWith('/verified-outcomes')) {
-      return { pageType: 'outcomes' }
+      return { ...base, pageType: 'outcomes' }
     }
     if (pathname.startsWith('/treatments/')) {
       const parts = pathname.split('/').filter(Boolean)
       const slug = parts[2]
       const procedure = PROCEDURES.find((p) => p.slug === slug)
       return {
+        ...base,
         pageType: 'treatment',
         treatmentName: procedure?.name || slug?.replace(/-/g, ' '),
       }
@@ -54,19 +59,37 @@ export function WhatsAppFloat() {
       const city = parts[1]
       const hospital = HOSPITALS.find((h) => h.slug === slug)
       return {
+        ...base,
         pageType: 'hospital',
         hospitalName: hospital?.name || slug?.replace(/-/g, ' '),
         city: hospital?.cityLabel || city,
       }
     }
-    return { pageType: 'general' }
+    return { ...base, pageType: 'general' }
   }
 
   const context = getContext()
   const waUrl = getWhatsAppUrl(context)
 
-  // Dynamic tooltip preview text depending on context
+  // Dynamic tooltip preview text depending on context & language
   const getTooltipPrompt = () => {
+    if (activeLang === 'bn') {
+      if (context.treatmentName) return `${context.treatmentName} চিকিৎসার খরচ জানতে চান? হোয়াটসঅ্যাপে আমাদের সাথে সরাসরি কথা বলুন।`
+      if (context.hospitalName) return `${context.hospitalName} হাসপাতাল সম্পর্কিত প্রশ্ন? সরাসরি কেয়ার টিমের সাথে কথা বলুন।`
+      return `ভারতে শীর্ষ হাসপাতালে চিকিৎসা প্রয়োজন? হোয়াটসঅ্যাপে এখনই পরামর্শ নিন।`
+    }
+    if (activeLang === 'ar') {
+      if (context.treatmentName) return `هل تحتاج تفاصيل تكلفة ${context.treatmentName}؟ تحدث مع فريقنا عبر واتساب.`
+      return `تبحث عن العلاج في الهند؟ تواصل مباشرة مع المنسق الطبي عبر واتساب.`
+    }
+    if (activeLang === 'ru') {
+      if (context.treatmentName) return `Нужна стоимость лечения (${context.treatmentName})? Напишите координатору в WhatsApp.`
+      return `Ищете лечение в Индии? Напишите нашему медицинскому координатору в WhatsApp.`
+    }
+    if (activeLang === 'fr') {
+      if (context.treatmentName) return `Besoin des tarifs pour ${context.treatmentName}? Discutez avec notre équipe sur WhatsApp.`
+      return `Vous recherchez un traitement en Inde? Discutez en direct avec un coordinateur.`
+    }
     if (context.treatmentName) {
       return `Need cost details for ${context.treatmentName}? Chat with our Care Team on WhatsApp!`
     }

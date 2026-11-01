@@ -24,13 +24,17 @@ import {
 import { DOCTORS, getDoctor } from '@/data/doctors'
 import { Badge, Button, Card, CardContent } from '@/components/ui/primitives'
 import { DoctorDetailActions } from '@/components/doctors/DoctorDetailActions'
+import { FaqSection } from '@/components/ui/FaqSection'
+import { getDoctorFaqs } from '@/data/faqsData'
 import { JsonLd } from '@/components/ui/primitives'
 import { buildBreadcrumbSchema, buildPhysicianSchema } from '@/lib/schema'
+import { getLocalizedDoctor } from '@/lib/i18n/contentTranslator'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://healthremade.com'
 
 interface DoctorPageProps {
   params: Promise<{ slug: string }>
+  searchParams?: Promise<{ lang?: string }>
 }
 
 export async function generateStaticParams() {
@@ -39,20 +43,37 @@ export async function generateStaticParams() {
   }))
 }
 
-export async function generateMetadata({ params }: DoctorPageProps): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: DoctorPageProps): Promise<Metadata> {
   const { slug } = await params
-  const doctor = getDoctor(slug)
-  if (!doctor) {
+  const { lang } = (await searchParams) || {}
+  const rawDoctor = getDoctor(slug)
+  if (!rawDoctor) {
     return { title: 'Doctor Not Found | healthremade' }
   }
 
+  const doctor = getLocalizedDoctor(rawDoctor, lang || 'en')
   const pageUrl = `${SITE_URL}/doctors/${doctor.slug}`
 
   return {
     title: `${doctor.name} — ${doctor.designation} in India | healthremade`,
     description: `Consult ${doctor.name}, ${doctor.designation} at ${doctor.hospitalName}, ${doctor.cityLabel}. ${doctor.experienceYears}+ years experience, ${doctor.surgeriesCount} surgeries performed. Watch video explanations and request a free opinion.`,
     alternates: {
-      canonical: `/doctors/${doctor.slug}`,
+      canonical: `${SITE_URL}/doctors/${doctor.slug}`,
+      languages: {
+        en: `${SITE_URL}/doctors/${doctor.slug}`,
+        bn: `${SITE_URL}/bn/doctors/${doctor.slug}`,
+        ar: `${SITE_URL}/ar/doctors/${doctor.slug}`,
+        ru: `${SITE_URL}/ru/doctors/${doctor.slug}`,
+        fr: `${SITE_URL}/fr/doctors/${doctor.slug}`,
+        sw: `${SITE_URL}/sw/doctors/${doctor.slug}`,
+        uz: `${SITE_URL}/uz/doctors/${doctor.slug}`,
+        ro: `${SITE_URL}/ro/doctors/${doctor.slug}`,
+        pt: `${SITE_URL}/pt/doctors/${doctor.slug}`,
+        es: `${SITE_URL}/es/doctors/${doctor.slug}`,
+        de: `${SITE_URL}/de/doctors/${doctor.slug}`,
+        tr: `${SITE_URL}/tr/doctors/${doctor.slug}`,
+        'x-default': `${SITE_URL}/doctors/${doctor.slug}`,
+      },
     },
     openGraph: {
       title: `${doctor.name} — ${doctor.designation} | healthremade`,
@@ -75,13 +96,16 @@ export async function generateMetadata({ params }: DoctorPageProps): Promise<Met
   }
 }
 
-export default async function DoctorProfilePage({ params }: DoctorPageProps) {
+export default async function DoctorProfilePage({ params, searchParams }: DoctorPageProps) {
   const { slug } = await params
-  const doctor = getDoctor(slug)
+  const { lang } = (await searchParams) || {}
+  const rawDoctor = getDoctor(slug)
 
-  if (!doctor) {
+  if (!rawDoctor) {
     notFound()
   }
+
+  const doctor = getLocalizedDoctor(rawDoctor, lang || 'en')
 
   const breadcrumbs = buildBreadcrumbSchema([
     { name: 'Home', url: SITE_URL },
@@ -379,6 +403,16 @@ export default async function DoctorProfilePage({ params }: DoctorPageProps) {
           </div>
         </section>
       )}
+
+      {/* ─── AEO & GEO FAQ Section (10 Doctor Specific Questions) ─── */}
+      <FaqSection
+        title={`Frequently Asked Questions About ${doctor.name}`}
+        subtitle={`Clinical consultations, free preliminary opinions, surgical success rates, and package estimates under ${doctor.name}.`}
+        badgeText="AEO & GEO Doctor Guide"
+        faqs={getDoctorFaqs(doctor)}
+        prefillTreatment={doctor.department}
+        className="bg-slate-50 border-t border-slate-200/80"
+      />
     </>
   )
 }

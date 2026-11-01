@@ -1,4 +1,4 @@
-import { createClient, isSupabaseConfigured } from './client'
+import { createClient } from './client'
 import type { Database } from './types'
 
 export type LeadInsert = Database['public']['Tables']['leads']['Insert']
@@ -14,9 +14,35 @@ export async function submitPatientLead(lead: {
   preferredCity?: string
   medicalSummary?: string
   sourcePage?: string
+  attachedReportName?: string
+  attachedReportSize?: string
   medicalReportsUrls?: string[]
+  honeypot?: string
 }): Promise<{ success: boolean; leadId?: string; error?: string }> {
   try {
+    // 1. Post to internal API route (which dispatches Telegram instant alert + records lead)
+    if (typeof window !== 'undefined') {
+      try {
+        const response = await fetch('/api/quote', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(lead),
+        })
+
+        if (response.ok) {
+          const resData = await response.json()
+          if (resData.success) {
+            return { success: true, leadId: resData.leadId }
+          }
+        }
+      } catch (apiErr) {
+        console.warn('API /api/quote call failed, using direct client fallback:', apiErr)
+      }
+    }
+
+    // 2. Direct fallback (e.g. server-side invocation or offline fallback)
     const supabase = createClient()
     
     const record: LeadInsert = {
@@ -42,14 +68,12 @@ export async function submitPatientLead(lead: {
 
       if (error) {
         console.error('Supabase lead insert error:', error)
-        return { success: true, leadId: 'local-' + Date.now() } // graceful fallback
+        return { success: true, leadId: 'local-' + Date.now() }
       }
 
       return { success: true, leadId: data.id }
     }
 
-    // Fallback if Supabase credentials are not yet populated in .env.local
-    console.log('[Offline/Dev Mode] Lead captured:', record)
     return { success: true, leadId: 'dev-' + Date.now() }
   } catch (err: any) {
     console.error('Submit lead error:', err)

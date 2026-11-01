@@ -22,16 +22,20 @@ import { Button, Badge, Card, CardContent } from '@/components/ui/primitives'
 import { DoctorCardActions } from '@/components/doctors/DoctorCardActions'
 import { useQuote } from '@/components/ui/QuoteModal'
 import { getWhatsAppUrl } from '@/lib/whatsapp'
+import { useLanguage } from '@/context/LanguageContext'
+import { getLocalizedDoctorList } from '@/lib/i18n/contentTranslator'
 
 export default function DoctorsPage() {
   const { doctors } = useAdminData()
+  const { locale, t } = useLanguage()
+  const localizedDoctors = useMemo(() => getLocalizedDoctorList(doctors, locale), [doctors, locale])
   const [selectedSpecialty, setSelectedSpecialty] = useState('all')
   const [selectedCity, setSelectedCity] = useState('all')
   const [searchQuery, setSearchQuery] = useState('')
   const { openQuoteModal } = useQuote()
 
   const filteredDoctors = useMemo(() => {
-    return doctors.filter((doc) => {
+    return localizedDoctors.filter((doc) => {
       const matchesSpecialty =
         selectedSpecialty === 'all' || doc.specialtySlug === selectedSpecialty
       const matchesCity = selectedCity === 'all' || doc.city === selectedCity
@@ -55,6 +59,7 @@ export default function DoctorsPage() {
     { id: 'orthopaedics', label: 'Orthopaedics & Joint Replacement' },
     { id: 'urology', label: 'Urology & Andrology' },
     { id: 'transplant', label: 'Liver & Organ Transplant' },
+    { id: 'ophthalmology', label: 'Ophthalmology & Eye Surgery' },
   ]
 
   const cities = [

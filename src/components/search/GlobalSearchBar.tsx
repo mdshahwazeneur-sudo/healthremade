@@ -16,6 +16,7 @@ import {
   Command,
   ChevronRight,
   TrendingUp,
+  HelpCircle,
 } from 'lucide-react'
 import * as Dialog from '@radix-ui/react-dialog'
 import { DOCTORS } from '@/data/doctors'
@@ -24,6 +25,8 @@ import { PROCEDURES } from '@/data/procedures'
 import { MOCK_BLOG_POSTS } from '@/data/adminData'
 import { useAdminData } from '@/context/AdminDataContext'
 import { formatINR } from '@/lib/utils'
+import { useCurrency } from '@/context/CurrencyContext'
+import { useQuote } from '@/components/ui/QuoteModal'
 
 export interface SearchResultItem {
   id: string
@@ -44,6 +47,7 @@ export function GlobalSearchModal({
 }) {
   const router = useRouter()
   const { doctors, hospitals, blogPosts } = useAdminData()
+  const { openQuoteModal } = useQuote()
   const [query, setQuery] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -71,6 +75,8 @@ export function GlobalSearchModal({
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [open, onOpenChange])
 
+  const { formatRange } = useCurrency()
+
   // Search Results
   const results = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -93,7 +99,7 @@ export function GlobalSearchModal({
           subtitle: `${proc.specialtyLabel} • ${proc.totalStayDays} Days Stay`,
           category: 'treatment',
           href: `/treatments/${proc.specialty}/${proc.slug}`,
-          badge: `${formatINR(proc.priceInrMin)} – ${formatINR(proc.priceInrMax)}`,
+          badge: formatRange(proc.priceInrMin, proc.priceInrMax),
         })
       }
     })
@@ -247,13 +253,40 @@ export function GlobalSearchModal({
               </div>
             )}
 
-            {/* When Query Has Results */}
+            {/* When Query Has No Matches: Show "ASK" CTA to open Quote Form prefilled */}
             {query.trim() && results.length === 0 && (
-              <div className="py-12 text-center text-slate-500 space-y-2">
-                <p className="text-sm font-semibold">No direct results found for &ldquo;{query}&rdquo;</p>
-                <p className="text-xs text-slate-400">
-                  Try searching for general keywords like &ldquo;Heart&rdquo;, &ldquo;Knee&rdquo;, &ldquo;Medanta&rdquo;, or &ldquo;Trehan&rdquo;.
-                </p>
+              <div className="py-8 px-4 text-center">
+                <div className="mx-auto max-w-md rounded-2xl border border-brand-200/90 bg-gradient-to-b from-brand-50/70 via-white to-white p-6 shadow-xs space-y-4">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-100 text-brand-700 shadow-2xs">
+                    <HelpCircle className="h-6 w-6" />
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <h3 className="text-base font-bold text-slate-900">
+                      Can&apos;t find &ldquo;{query}&rdquo; in our direct catalog?
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      We coordinate medical treatments across 15+ JCI & NABH accredited hospitals. Ask our medical desk for custom opinions, surgeon availability, and package estimates for your specific condition.
+                    </p>
+                  </div>
+
+                  <div className="pt-1 flex flex-col items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onOpenChange(false)
+                        openQuoteModal({ treatment: query.trim() })
+                      }}
+                      className="inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 hover:bg-brand-700 active:scale-95 text-white font-extrabold text-xs sm:text-sm px-6 py-2.5 shadow-md hover:shadow-lg transition-all"
+                    >
+                      <span>ASK</span>
+                      <ArrowRight className="h-4 w-4" />
+                    </button>
+                    <span className="text-[11px] text-slate-400 font-medium">
+                      100% Free • Direct hospital tariff in 24 hours
+                    </span>
+                  </div>
+                </div>
               </div>
             )}
 

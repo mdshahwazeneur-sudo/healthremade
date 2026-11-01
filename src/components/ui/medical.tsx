@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { cn, formatPriceRange, type Currency, CURRENCY_LABELS } from '@/lib/utils'
+import { useCurrency } from '@/context/CurrencyContext'
 import { Badge } from './primitives'
 import { CheckCircle2, AlertTriangle } from 'lucide-react'
 
@@ -14,8 +15,8 @@ interface PriceRangeProps {
 }
 
 export function PriceRange({ minInr, maxInr, lastVerifiedAt, className }: PriceRangeProps) {
-  const [currency, setCurrency] = useState<Currency>('INR')
-  const currencies: Currency[] = ['INR', 'USD', 'AED', 'GBP', 'EUR']
+  const { currency, setCurrency, formatRange } = useCurrency()
+  const currencies: Currency[] = ['USD', 'EUR', 'AED', 'GBP', 'INR']
 
   return (
     <div className={cn('space-y-2', className)}>
@@ -36,7 +37,7 @@ export function PriceRange({ minInr, maxInr, lastVerifiedAt, className }: PriceR
         ))}
       </div>
       <p className="text-xl font-bold text-foreground">
-        {formatPriceRange(minInr, maxInr, currency)}
+        {formatRange(minInr, maxInr)}
       </p>
       {lastVerifiedAt ? (
         <p className="flex items-center gap-1 text-xs text-muted-foreground">
